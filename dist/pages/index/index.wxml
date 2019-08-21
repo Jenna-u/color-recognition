@@ -1,0 +1,8 @@
+<block wx:if="{{$taroCompReady}}">
+    <view class="index">
+        <h-1>拍照识色</h-1>
+        <div className="camera-area">
+            <at-icon compid="{{$compid__9}}"></at-icon>
+        </div>
+    </view>
+</block>

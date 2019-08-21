@@ -1,0 +1,15 @@
+{
+  "miniprogramRoot": "./",
+  "projectname": "Color_Recognition",
+  "description": "拍照识色",
+  "appid": "wx77c6cb66e8c19823",
+  "setting": {
+    "urlCheck": true,
+    "es6": false,
+    "postcss": false,
+    "minified": false,
+    "newFeature": true
+  },
+  "compileType": "miniprogram",
+  "condition": {}
+}
