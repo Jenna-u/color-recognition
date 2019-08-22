@@ -1,8 +1,10 @@
 import Taro, { Component, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import { AtIcon } from 'taro-ui';
+import { AtIcon } from 'taro-ui'
 import './index.scss'
-import "taro-ui/dist/style/components/icon.scss";
+import "taro-ui/dist/style/components/icon.scss"
+
+const cameraContext = Taro.createCameraContext()
 
 export default class Index extends Component {
 
@@ -13,6 +15,7 @@ export default class Index extends Component {
    * 对于像 navigationBarTextStyle: 'black' 这样的推导出的类型是 string
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
+
   config: Config = {
     navigationBarTitleText: '首页'
   }
@@ -30,10 +33,10 @@ export default class Index extends Component {
   render () {
     return (
       <View className='index'>
-        <h1>拍照识色</h1>
-        <div className="camera-area">
-          <AtIcon value='camera' size='30'/>
-        </div>
+        <View className='title'>拍照识色</View>
+          <View className='camera-area'>
+            <AtIcon value='camera' size='30' />
+          </View>
       </View>
     )
   }
