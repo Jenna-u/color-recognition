@@ -1,9 +1,9 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { useState, Config } from '@tarojs/taro'
 import { View, Navigator } from '@tarojs/components'
 import { AtIcon, AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import './index.scss'
 import "taro-ui/dist/style/components/icon.scss"
-export default class Index extends Component {
+export default function Index() {
 
   /**
    * 指定config的类型声明为: Taro.Config
@@ -13,63 +13,43 @@ export default class Index extends Component {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
 
-  state = {
-    isOpened: false
-  }
 
-  config: Config = {
-    navigationBarTitleText: '首页'
-  }
+  // config: Config = {
+  //   navigationBarTitleText: '首页'
+  // }
 
-  componentWillMount () { }
+  const[isOpened, setOpened] = useState(false)
 
-  componentDidMount() {
-  }
-
-  componentWillUnmount () { }
-
-  componentDidShow () { }
-
-  componentDidHide() { }
   
-  handleOpenActionSheet = () => {
-    this.setState({
-      isOpened: true
+  const handleOpenActionSheet = () => {
+    setOpened(true)
+  }
+
+  const handleClose = () => {
+    setOpened(false)
+  }
+
+  const handleClick = () => {
+    Taro.navigateTo({ url: "/pages/camera/index" }).then(() => {
+      setOpened(false)
     })
   }
 
-  handleClose = () => {
-    this.setState({
-      isOpened: false
-    })
-  }
-
-  handleCamera = () => {
-    cameraContext.takePhoto({
-      quality: 'high',
-      success: (res) => {
-        console.log('src', res.tempImagePath);
-      }
-    })
-  }
-
-  render () {
-    return (
-      <View className='index'>
-        <View className='title'>拍照识色</View>
-          <View className='camera-area' onClick={this.handleOpenActionSheet}>
-            <AtIcon value='camera' size='30' />
-        </View>
-        <AtActionSheet isOpened={this.state.isOpened} cancelText='cancel' onCancel={this.handleClose}>
-          <AtActionSheetItem>
-            <Navigator url="/pages/camera/index" hover-class="navigator-hover">拍照</Navigator>
-          </AtActionSheetItem>
-          <AtActionSheetItem>
-            从系统相册选择
-          </AtActionSheetItem>
-        </AtActionSheet>
-        {/*  */}
+  return (
+    <View className='index'>
+      <View className='title'>拍照识色</View>
+        <View className='camera-area' onClick={handleOpenActionSheet}>
+          <AtIcon value='camera' size='30' />
       </View>
-    )
-  }
+      <AtActionSheet isOpened={isOpened} cancelText='cancel' onCancel={handleClose}>
+        <AtActionSheetItem onClick={handleClick}>
+          拍照
+        </AtActionSheetItem>
+        <AtActionSheetItem>
+          从系统相册选择
+        </AtActionSheetItem>
+      </AtActionSheet>
+      {/*  */}
+    </View>
+  )
 }

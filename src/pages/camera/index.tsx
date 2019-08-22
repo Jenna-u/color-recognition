@@ -1,9 +1,17 @@
 import Taro, { useState } from '@tarojs/taro';
-import { View, Text, Camera } from '@tarojs/components'
+import { View, Camera } from '@tarojs/components'
 
 const cameraContext = Taro.createCameraContext()
 
 export default function CameraIndex() {
+  const handleCamera = () => {
+    cameraContext.takePhoto({
+      quality: 'high',
+      success: (res) => {
+        console.log('src', res.tempImagePath);
+      }
+    })
+  }
 
   return (
     <View>
