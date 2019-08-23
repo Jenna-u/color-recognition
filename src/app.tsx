@@ -22,7 +22,7 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/camera/index',
-      'pages/recognition/index'
+      'pages/recognition/index',
     ],
     window: {
       backgroundTextStyle: 'light',

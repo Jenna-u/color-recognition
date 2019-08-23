@@ -41,7 +41,8 @@ export default function Index() {
       sizeType: ['original', 'compressed'],
       sourceType: ['album', 'camera'],
     }).then(res => {
-      console.log('res', res);
+      const imageUrl = res.tempFilePaths[0]
+      Taro.reLaunch({url: `/pages/recognition/index?imageUrl=${imageUrl}`})
       setOpened(false)
     })
   }

@@ -4,7 +4,7 @@ import { View, Camera, Button, Image } from '@tarojs/components'
 export default function CameraIndex() {
   const cameraContext = Taro.createCameraContext()
 
-  const [url, setImage] = useState('https://www.baidu.com/img/bd_logo1.png')
+  const [imageUrl, setImage] = useState('')
 
   const handleCamera = () => {
     cameraContext.takePhoto({
@@ -22,18 +22,18 @@ export default function CameraIndex() {
   }
 
   const handleConfirm = () => {
-    Taro.reLaunch({url: '/pages/recognition/index?url=url'})
+    Taro.reLaunch({url: `/pages/recognition/index?imageUrl=${imageUrl}`})
   }
 
-  console.log('url', url);
+  console.log('url', imageUrl);
 
   return (
     <View className='camera-index'>
       {
-        url ?
+        imageUrl ?
         <Image
           style='width: 100%; height: 100vh;'
-          src={url}
+          src={imageUrl}
         /> :
         <Camera
           devicePosition="back"
@@ -43,12 +43,12 @@ export default function CameraIndex() {
       }
       <View className="camera-control">
         <View className="button-group">
-        <View className="cancel" onClick={handleCancel}>Cancel</View>
+          {imageUrl && <View className="cancel" onClick={handleCancel}>Cancel</View>}
         <Button
           className="take-photo"
           onClick={handleCamera}
         />
-          {url && <View onClick={handleConfirm}>Use Photo</View>}
+          {imageUrl && <View onClick={handleConfirm}>Use Photo</View>}
         </View>
       </View>
     </View>
