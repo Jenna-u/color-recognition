@@ -16,17 +16,13 @@ export default function CameraIndex() {
     })
   }
 
-  const getPixel = () => {
-    Taro.canvasGetImageData({
-      canvasId: 'myCanvas',
-      x: 0,
-      y: 0,
-      width: 100,
-      height: 100,
-      success: (res) => {
-        console.log('src', res);
-      },
-    })
+  const handleCancel = () => {
+    setImage('');
+
+  }
+
+  const handleConfirm = () => {
+    Taro.reLaunch({url: '/pages/recognition/index?url=url'})
   }
 
   console.log('url', url);
@@ -45,11 +41,16 @@ export default function CameraIndex() {
           style="width: 100%; height: 100vh;"
         />
       }
-
-      <Button
-        className="take-photo"
-        onClick={handleCamera}
-      />
+      <View className="camera-control">
+        <View className="button-group">
+        <View className="cancel" onClick={handleCancel}>Cancel</View>
+        <Button
+          className="take-photo"
+          onClick={handleCamera}
+        />
+          {url && <View onClick={handleConfirm}>Use Photo</View>}
+        </View>
+      </View>
     </View>
   )
 }

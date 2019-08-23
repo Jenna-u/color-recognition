@@ -21,7 +21,8 @@ class App extends Component {
   config: Config = {
     pages: [
       'pages/index/index',
-      'pages/camera/index'
+      'pages/camera/index',
+      'pages/recognition/index'
     ],
     window: {
       backgroundTextStyle: 'light',
