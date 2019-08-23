@@ -1,8 +1,8 @@
 import Taro, { useState, Config } from '@tarojs/taro'
-import { View, Navigator } from '@tarojs/components'
+import { View } from '@tarojs/components'
 import { AtIcon, AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import './index.scss'
-import "taro-ui/dist/style/components/icon.scss"
+
 export default function Index() {
 
   /**
@@ -35,6 +35,17 @@ export default function Index() {
     })
   }
 
+  const handleChooseImage = () => {
+    Taro.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+    }).then(res => {
+      console.log('res', res);
+      setOpened(false)
+    })
+  }
+
   return (
     <View className='index'>
       <View className='title'>拍照识色</View>
@@ -45,7 +56,7 @@ export default function Index() {
         <AtActionSheetItem onClick={handleClick}>
           拍照
         </AtActionSheetItem>
-        <AtActionSheetItem>
+        <AtActionSheetItem onClick={handleChooseImage}>
           从系统相册选择
         </AtActionSheetItem>
       </AtActionSheet>
