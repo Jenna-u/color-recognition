@@ -1,54 +1,61 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Button, Canvas } from '@tarojs/components'
-import { IncomingMessage } from 'http';
-
+import { View, Canvas } from '@tarojs/components'
+import { createPixelArray } from '../../utils/index'
+import quantize from 'quantize';
 
 
 export default class Recognition extends Component {
+
+  state = {
+    // palette: [[246, 74, 135],
+    // [87, 96, 74],
+    // [171, 196, 168],
+    // [39, 32, 30],
+    // [157, 153, 132],
+    // [127, 154, 114],
+    // [215, 209, 194],
+    // [135, 160, 136],
+    // [174, 175, 178],
+    // [35, 53, 32]]
+    palette: []
+  }
   
   componentDidMount() {
-    const ctx = Taro.createCanvasContext('canvas', this);
+    const ctx = Taro.createCanvasContext('canvas', this.$scope);
     const imageUrl = this.$router.params.imageUrl
+
     Taro.getImageInfo({ src: imageUrl }).then(res => {
-      ctx.drawImage(imageUrl, 0, 0, res.width, res.height);
+      const { width, height } = res;
+      ctx.drawImage(imageUrl, 0, 0, width, height);
       ctx.draw();
-      this.getImagePixel();
+      this.getImagePixel(width, height);
     })
+    
   }
 
-  getImagePixel = () => {
+  getImagePixel = (w: number, h: number) => {
     Taro.canvasGetImageData({
       canvasId: 'canvas',
       x: 0,
       y: 0,
-      width: 1000,
-      height: 1000,
-    }).then(res => {
-      const count = res.width * res.height;
-      const arr = this.setPixel(res.data, count, 10)
-      console.log('rgb',res, arr)
-    })
+      width: Math.floor(w/2),
+      height: Math.floor(h/2),
+      success: (res) => {
+        const { width, height, data } = res
+        const count = width * height;
+        const arr = createPixelArray(data, count, 10)
+        const colorMap = quantize(arr, 10);
+        this.setState({
+          palette: colorMap.palette()
+        })
+        console.log('ssss', colorMap.palette());
+        // console.log(arr, result.map(arr[0]), result.palette());
+      }
+    }, this.$scope)
   }
 
-  setPixel = (imgData: any, pixelCount: number, quality: number) => {
-    const pixels = imgData;
-    const pixelArray = [];
-
-    for (let i = 0, offset, r, g, b, a; i < pixelCount; i = i + quality) {
-        offset = i * 4;
-        r = pixels[offset + 0];
-        g = pixels[offset + 1];
-        b = pixels[offset + 2];
-        a = pixels[offset + 3];
-
-        // If pixel is mostly opaque and not white
-        if (typeof a === 'undefined' || a >= 125) {
-            if (!(r > 250 && g > 250 && b > 250)) {
-                pixelArray.push([r, g, b]);
-            }
-        }
-    }
-    return pixelArray;
+  handleNavigatorBack = () => {
+    Taro.reLaunch({ url: '/pages/index/index' });
   }
 
 
@@ -57,12 +64,14 @@ export default class Recognition extends Component {
       <View>
         识别页面
         <Canvas
-          ref="cvs"
           canvasId="canvas"
           style='width: 100%; height: 80vh;'
         />
-        <View>
-          主色:
+        <View className="palette">
+          { this.state.palette.map(c => <View className="item" style={{'background': `rgb(${c})` }} />) }
+        </View>
+        <View onClick={this.handleNavigatorBack}>
+          返回主页:
         </View>
       </View>
     )

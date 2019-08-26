@@ -1,0 +1,10 @@
+.palette {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .item {
+    width: 100px;
+    height: 100px;
+  }
+}

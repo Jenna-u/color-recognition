@@ -1,14 +1,4 @@
-export function getPixel(src) {
-  let img = new Image();
-  img.src = src;
-  img.onload = function() {
-    createPixelArray(this, 10, 1);
-  };
-
-}
-
-
-function createPixelArray(imgData, pixelCount, quality) {
+export function createPixelArray(imgData, pixelCount, quality) {
   const pixels = imgData;
   const pixelArray = [];
 
