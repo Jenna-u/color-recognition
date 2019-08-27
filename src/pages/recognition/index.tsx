@@ -3,6 +3,7 @@ import { View, Canvas } from '@tarojs/components'
 import { createPixelArray } from '../../utils/index'
 import quantize from 'quantize';
 
+console.log('out', quantize);
 
 export default class Recognition extends Component {
 
@@ -18,40 +19,18 @@ export default class Recognition extends Component {
     // [174, 175, 178],
     // [35, 53, 32]]
     palette: [],
-    width: 'auto',
-    height: 'auto'
   }
   
   componentDidMount() {
+    const ctx = Taro.createCanvasContext('canvas', this.$scope);
     const imageUrl = this.$router.params.imageUrl
 
     Taro.getImageInfo({ src: imageUrl }).then(res => {
       const { width, height } = res;
-      this.setState({ width: width + 'px', height: height + 'px' });
-
-      const ctx = Taro.createCanvasContext('canvas', this.$scope);
       ctx.drawImage(imageUrl, 0, 0);
       ctx.draw();
       this.getImagePixel(width, height);
     })
-    
-  }
-
-  setImagetoCanvas = (data, width, height) => {
-    Taro.canvasPutImageData({
-      canvasId: 'canvasOut',
-      data,
-      x: 0,
-      y: 0,
-      width,
-      height,
-      success: (res) => {
-        console.log(res);
-      },
-      fail: (res) => {
-        console.log('fail', res)
-      }
-    }, this.$scope)
   }
 
   getImagePixel = (w: number, h: number) => {
@@ -66,29 +45,22 @@ export default class Recognition extends Component {
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
-        console.log('quantize', data, pixelArray, colorMap);
+        console.log('ssss', data, colorMap);
         this.setState({
           palette: colorMap.palette()
         })
-      },
-      fail: (res) => {
-        console.log('info', res);
+        // console.log(arr, result.map(arr[0]), result.palette());
       }
     }, this.$scope)
   }
 
-  handleNavigatorBack = () => {
-    Taro.reLaunch({ url: '/pages/index/index' });
-  }
-
-
   render() {
-    const { width, height, palette } = this.state
+    const { palette } = this.state
     return (
       <View className="color-card">
         <Canvas
           canvasId="canvas"
-          style={{'width': width, height: height}}
+          style='width: 500px; height: 500px;'
         />
         <View className="color-output">
           { palette.map(c => <View className="item" style={{'background': `rgb(${c})` }} />) }

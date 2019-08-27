@@ -18,23 +18,23 @@ export default function Index() {
   //   navigationBarTitleText: '首页'
   // }
 
-  const [isOpened, setOpened] = useState(false)
-  const [tab, changeTab] = useState(0)
+  // const [isOpened, setOpened] = useState(false)
+  const [current, changeTab] = useState(0)
 
   
-  const handleOpenActionSheet = () => {
-    setOpened(true)
-  }
+  // const handleOpenActionSheet = () => {
+  //   setOpened(true)
+  // }
 
-  const handleClose = () => {
-    setOpened(false)
-  }
+  // const handleClose = () => {
+  //   setOpened(false)
+  // }
 
-  const handleClick = () => {
-    Taro.navigateTo({ url: "/pages/camera/index" }).then(() => {
-      setOpened(false)
-    })
-  }
+  // const handleClick = () => {
+  //   Taro.navigateTo({ url: "/pages/camera/index" }).then(() => {
+  //     setOpened(false)
+  //   })
+  // }
 
   const handleChooseImage = () => {
     Taro.chooseImage({
@@ -44,7 +44,7 @@ export default function Index() {
     }).then(res => {
       const imageUrl = res.tempFilePaths[0]
       Taro.navigateTo({url: `/pages/recognition/index?imageUrl=${imageUrl}`})
-      setOpened(false)
+      // setOpened(false)
     })
   }
 
@@ -72,10 +72,10 @@ export default function Index() {
           fixed
           tabList={[
             { title: '首页', iconType: 'home', },
-            { title: '色卡', iconType: 'heart' }
+            { title: '色谱', iconType: 'heart' }
           ]}
           onClick={handleChangeTab}
-          current={tab}
+          current={current}
         />
       </View>
   )
