@@ -1,10 +1,18 @@
-.palette {
+.color-card {
+  margin: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.color-output {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 20px;
 
   .item {
-    width: 100px;
-    height: 100px;
+    flex: 1;
+    height: 300px;
   }
 }

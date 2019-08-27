@@ -1,6 +1,6 @@
 import Taro, { useState, Config } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtIcon, AtActionSheet, AtActionSheetItem } from 'taro-ui'
+import { AtIcon, AtTabBar, AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import './index.scss'
 
 export default function Index() {
@@ -18,7 +18,8 @@ export default function Index() {
   //   navigationBarTitleText: '首页'
   // }
 
-  const[isOpened, setOpened] = useState(false)
+  const [isOpened, setOpened] = useState(false)
+  const [tab, changeTab] = useState(0)
 
   
   const handleOpenActionSheet = () => {
@@ -42,26 +43,40 @@ export default function Index() {
       sourceType: ['album', 'camera'],
     }).then(res => {
       const imageUrl = res.tempFilePaths[0]
-      Taro.reLaunch({url: `/pages/recognition/index?imageUrl=${imageUrl}`})
+      Taro.navigateTo({url: `/pages/recognition/index?imageUrl=${imageUrl}`})
       setOpened(false)
     })
   }
 
+  const handleChangeTab = (value) => {
+    changeTab(value)
+  }
+
   return (
-    <View className='index'>
-      <View className='title'>拍照识色</View>
-        <View className='camera-area' onClick={handleOpenActionSheet}>
-          <AtIcon value='camera' size='30' />
+    <View>
+      <View className='index'>
+        <View className='title'>拍照识色</View>
+          <View className='camera-area' onClick={handleChooseImage}>
+            <AtIcon value='camera' size='30' />
+        </View>
+        {/* <AtActionSheet isOpened={isOpened} cancelText='cancel' onCancel={handleClose}>
+          <AtActionSheetItem onClick={handleClick}>
+            拍照
+          </AtActionSheetItem>
+          <AtActionSheetItem onClick={handleChooseImage}>
+            从系统相册选择
+          </AtActionSheetItem>
+        </AtActionSheet> */}
       </View>
-      <AtActionSheet isOpened={isOpened} cancelText='cancel' onCancel={handleClose}>
-        <AtActionSheetItem onClick={handleClick}>
-          拍照
-        </AtActionSheetItem>
-        <AtActionSheetItem onClick={handleChooseImage}>
-          从系统相册选择
-        </AtActionSheetItem>
-      </AtActionSheet>
-      {/*  */}
-    </View>
+      <AtTabBar
+          fixed
+          tabList={[
+            { title: '首页', iconType: 'home', },
+            { title: '色卡', iconType: 'heart' }
+          ]}
+          onClick={handleChangeTab}
+          current={tab}
+        />
+      </View>
   )
 }

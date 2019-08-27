@@ -17,20 +17,41 @@ export default class Recognition extends Component {
     // [135, 160, 136],
     // [174, 175, 178],
     // [35, 53, 32]]
-    palette: []
+    palette: [],
+    width: 'auto',
+    height: 'auto'
   }
   
   componentDidMount() {
-    const ctx = Taro.createCanvasContext('canvas', this.$scope);
     const imageUrl = this.$router.params.imageUrl
 
     Taro.getImageInfo({ src: imageUrl }).then(res => {
       const { width, height } = res;
-      ctx.drawImage(imageUrl, 0, 0, width, height);
+      this.setState({ width: width + 'px', height: height + 'px' });
+
+      const ctx = Taro.createCanvasContext('canvas', this.$scope);
+      ctx.drawImage(imageUrl, 0, 0);
       ctx.draw();
       this.getImagePixel(width, height);
     })
     
+  }
+
+  setImagetoCanvas = (data, width, height) => {
+    Taro.canvasPutImageData({
+      canvasId: 'canvasOut',
+      data,
+      x: 0,
+      y: 0,
+      width,
+      height,
+      success: (res) => {
+        console.log(res);
+      },
+      fail: (res) => {
+        console.log('fail', res)
+      }
+    }, this.$scope)
   }
 
   getImagePixel = (w: number, h: number) => {
@@ -38,18 +59,20 @@ export default class Recognition extends Component {
       canvasId: 'canvas',
       x: 0,
       y: 0,
-      width: Math.floor(w/2),
-      height: Math.floor(h/2),
+      width: w,
+      height: h,
       success: (res) => {
         const { width, height, data } = res
         const count = width * height;
-        const arr = createPixelArray(data, count, 10)
-        const colorMap = quantize(arr, 10);
+        const pixelArray = createPixelArray(data, count, 10)
+        const colorMap = quantize(pixelArray, 5);
+        console.log('quantize', data, pixelArray, colorMap);
         this.setState({
           palette: colorMap.palette()
         })
-        console.log('ssss', colorMap.palette());
-        // console.log(arr, result.map(arr[0]), result.palette());
+      },
+      fail: (res) => {
+        console.log('info', res);
       }
     }, this.$scope)
   }
@@ -60,18 +83,15 @@ export default class Recognition extends Component {
 
 
   render() {
+    const { width, height, palette } = this.state
     return (
-      <View>
-        识别页面
+      <View className="color-card">
         <Canvas
           canvasId="canvas"
-          style='width: 100%; height: 80vh;'
+          style={{'width': width, height: height}}
         />
-        <View className="palette">
-          { this.state.palette.map(c => <View className="item" style={{'background': `rgb(${c})` }} />) }
-        </View>
-        <View onClick={this.handleNavigatorBack}>
-          返回主页:
+        <View className="color-output">
+          { palette.map(c => <View className="item" style={{'background': `rgb(${c})` }} />) }
         </View>
       </View>
     )
