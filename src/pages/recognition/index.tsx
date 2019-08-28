@@ -24,13 +24,31 @@ export default class Recognition extends Component {
   componentDidMount() {
     const ctx = Taro.createCanvasContext('canvas', this.$scope);
     const imageUrl = this.$router.params.imageUrl
+    const query = Taro.createSelectorQuery();
+    //选择id
+    query.select('.color-card').boundingClientRect((rect) => {
+      const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
+      console.log(parentWidth, 'parentWidth')
+      // console.log(rect.width)
+      Taro.getImageInfo({ src: imageUrl }).then(res => {
+        const { width, height } = res;
+        let w = width;
+        let h = height;
+        console.log('width', width, height)
+        if (width > height) {
+          w = parentWidth
+          h = height / width * parentWidth
+        } else {
+          h = parentHeight
+          w = width / height * parentHeight
+        }
+        ctx.drawImage(imageUrl, 0, 0, width, height, 0, 0, w, h);
+        ctx.draw();
+        this.getImagePixel(width, height);
+      })
+    }).exec();
 
-    Taro.getImageInfo({ src: imageUrl }).then(res => {
-      const { width, height } = res;
-      ctx.drawImage(imageUrl, 0, 0);
-      ctx.draw();
-      this.getImagePixel(width, height);
-    })
+    
   }
 
   getImagePixel = (w: number, h: number) => {
@@ -60,7 +78,7 @@ export default class Recognition extends Component {
       <View className="color-card">
         <Canvas
           canvasId="canvas"
-          style='width: 500px; height: 500px;'
+          style='width: 100%; height: 500px;'
         />
         <View className="color-output">
           { palette.map(c => <View className="item" style={{'background': `rgb(${c})` }} />) }
