@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Canvas } from '@tarojs/components'
+import { View, Canvas, Text } from '@tarojs/components'
 import { createPixelArray } from '../../utils/index'
 import quantize from 'quantize';
 
@@ -17,7 +17,8 @@ export default class Recognition extends Component {
     // [215, 209, 194],
     // [135, 160, 136],
     // [174, 175, 178],
-    // [35, 53, 32]]
+    // [35, 53, 32]
+    // ]
     palette: [],
   }
   
@@ -34,7 +35,6 @@ export default class Recognition extends Component {
         const { width, height } = res;
         let w = width;
         let h = height;
-        console.log('width', width, height)
         if (width > height) {
           w = parentWidth
           h = height / width * parentWidth
@@ -67,9 +67,12 @@ export default class Recognition extends Component {
         this.setState({
           palette: colorMap.palette()
         })
-        // console.log(arr, result.map(arr[0]), result.palette());
       }
     }, this.$scope)
+  }
+
+  rgbToHex(rgb) {
+    return rgb.map(x => parseInt(x).toString(16)).join('')
   }
 
   render() {
@@ -78,11 +81,17 @@ export default class Recognition extends Component {
       <View className="color-card">
         <Canvas
           canvasId="canvas"
-          style='width: 100%; height: 500px;'
+          style='width: 100%; height: 300px;'
         />
         <View className="color-output">
-          { palette.map(c => <View className="item" style={{'background': `rgb(${c})` }} />) }
-        </View>
+          <Text>色卡: </Text>
+          {palette.map(c =>
+            <View className="item">
+              <View className="color-piece" style={{ 'background': `rgb(${c})` }} />
+              <View>{`#${this.rgbToHex(c)}`}</View>
+            </View>
+          )}
+          </View>
       </View>
     )
   }
