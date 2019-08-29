@@ -50,7 +50,7 @@ export default function Index() {
 
   const handleChangeTab = (value) => {
     changeTab(value)
-    value === 0 ? Taro.navigateTo({url: '/pages/index/index'}) : Taro.navigateTo({url: '/pages/colors/index'})
+    if(value === 1) Taro.navigateTo({url: '/pages/colors/index'})
   }
 
   return (

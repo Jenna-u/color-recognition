@@ -18,3 +18,11 @@ export function createPixelArray(imgData, pixelCount, quality) {
   }
   return pixelArray;
 }
+
+export function rgbToHex(rgb) {
+  return rgb.map(x => parseInt(x).toString(16)).join('')
+}
+
+export function rgbToCMYK(rgb) {
+  
+}

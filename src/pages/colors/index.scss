@@ -7,6 +7,7 @@
     top: 20px;
     left: 20px;
     width: 200px;
+    height: 100vh;
     overflow-x: auto;
 
     .colors-list{
@@ -31,6 +32,6 @@
     width: 100%;
     height: 100vh;
     text-align: right;
-    transition: all .6s ease-in-out;
+    transition: all .45s ease-in-out;
   }
 }

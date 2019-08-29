@@ -1,35 +1,20 @@
-import Taro, { useState, Config } from '@tarojs/taro'
-import { View, Text, ScrollView } from '@tarojs/components'
+import Taro, { useState } from '@tarojs/taro'
+import { View, ScrollView } from '@tarojs/components'
 import colors from './colors.js'
 
 export default function Colors() {
-
-  const c = {
-    "CMYK": [
-        4,
-        5,
-        18,
-        0
-    ],
-    "RGB": [
-        249,
-        244,
-        220
-    ],
-    "hex": "#f9f4dc",
-    "name": "乳白",
-    "pinyin": "rubai"
-  }
-  const [currentColor, setBg] = useState(c)
+  const [currentColor, setBg] = useState(colors[0])
 
   return (
-    <ScrollView
-      scrollY
+    <View
       className="colors-container"
-      upperThreshold={10}
-      scrollWithAnimation
     >
-      <View className="colors-nav">
+      <ScrollView
+        scrollY
+        className="colors-nav"
+        upperThreshold={10}
+        scrollWithAnimation
+      >
         <View className="colors-list">
           {colors.map(c =>
             <View
@@ -41,12 +26,12 @@ export default function Colors() {
             </View>
           )}
         </View>
-      </View>
+      </ScrollView>
       <View className="colors-info" style={{ backgroundColor: `${currentColor.hex}` }}>
         <View>{currentColor.name}</View>
-        <View>CMYK:{currentColor.CMYK.toString()}</View>
-        <View>RGB:{ currentColor.RGB.toString()}</View>
+        <View>CMYK: {currentColor.CMYK.toString()}</View>
+        <View>RGB: { currentColor.RGB.toString()}</View>
       </View>
-    </ScrollView>
+    </View>
   );
 }

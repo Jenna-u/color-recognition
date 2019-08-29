@@ -1,9 +1,7 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Canvas, Text } from '@tarojs/components'
-import { createPixelArray } from '../../utils/index'
+import { createPixelArray, rgbToHex } from '../../utils/index'
 import quantize from 'quantize';
-
-console.log('out', quantize);
 
 export default class Recognition extends Component {
 
@@ -18,8 +16,9 @@ export default class Recognition extends Component {
     // [135, 160, 136],
     // [174, 175, 178],
     // [35, 53, 32]
-    // ]
+    // ],
     palette: [],
+    currentColor: ['']
   }
   
   componentDidMount() {
@@ -30,7 +29,7 @@ export default class Recognition extends Component {
     query.select('.color-card').boundingClientRect((rect) => {
       const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
       console.log(parentWidth, 'parentWidth')
-      // console.log(rect.width)
+
       Taro.getImageInfo({ src: imageUrl }).then(res => {
         const { width, height } = res;
         let w = width;
@@ -65,33 +64,53 @@ export default class Recognition extends Component {
         const colorMap = quantize(pixelArray, 5);
         console.log('ssss', data, colorMap);
         this.setState({
-          palette: colorMap.palette()
+          palette: colorMap.palette(),
+          currentColor: colorMap.map(pixelArray[0])
         })
       }
     }, this.$scope)
   }
 
-  rgbToHex(rgb) {
-    return rgb.map(x => parseInt(x).toString(16)).join('')
+  handleChange = (c) => {
+    this.setState({
+      currentColor: c
+    })
+  }
+
+  setClipboard = (data) => {
+    Taro.setClipboardData({
+      data: data,
+      success: (res) => {
+        console.log('rs', res)
+      }
+    })
   }
 
   render() {
     const { palette } = this.state
     return (
-      <View className="color-card">
-        <Canvas
-          canvasId="canvas"
-          style='width: 100%; height: 300px;'
-        />
-        <View className="color-output">
-          <Text>色卡: </Text>
-          {palette.map(c =>
-            <View className="item">
-              <View className="color-piece" style={{ 'background': `rgb(${c})` }} />
-              <View>{`#${this.rgbToHex(c)}`}</View>
-            </View>
-          )}
+      <View className="recognition-container">
+        <View className="color-card">
+          <Canvas
+            canvasId="canvas"
+            style='width: 100%; height: 300px;'
+          />
+          <View className="color-output">
+            <Text>色卡: </Text>
+            {palette.map(c =>
+              <View className="item">
+                <View className="color-piece" onClick={() => this.handleChange(c)} style={{ 'background': `rgb(${c})` }} />
+              </View>
+            )}
           </View>
+          {this.state.currentColor.length !== 0 && <View className="color-params">
+          <View className="color-block" style={{ backgroundColor: `#${rgbToHex(this.state.currentColor)}` }} />
+          <View className="color-numerical">
+            <View className="hex" onClick={() => this.setClipboard(`#${rgbToHex(this.state.currentColor)}`)}>HEX: {`#${rgbToHex(this.state.currentColor)}`}</View>
+            <View className="rgb" onClick={() => this.setClipboard(this.state.currentColor.toString())}>RGB: {this.state.currentColor.toString()}</View>
+          </View>
+        </View>}
+        </View>
       </View>
     )
   }

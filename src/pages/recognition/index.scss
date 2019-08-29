@@ -1,8 +1,14 @@
+.recognition-container {
+  background-color: #f5f6f8;
+  padding: 20px;
+}
+
 .color-card {
   margin: 20px;
-  border: 1px solid #ccc;
+  border: 20px solid #fdfdfd;
   border-radius: 10px;
   overflow: hidden;
+  background-color: #fff;
 }
 
 .color-output {
@@ -21,4 +27,19 @@
     height: 60px;
     border-radius: 50%;
   }
+}
+
+.color-params {
+  margin: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.color-block {
+  margin-right: 20px;
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
 }

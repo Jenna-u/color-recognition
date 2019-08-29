@@ -1,3 +1,4 @@
+// 参看: 色谱 中科院科技情报编委会名词室.科学出版社,1957. Adobe RGB / CMYK FORGA39, Dot Gain 15%
 const colors = [
     {
         "CMYK": [
