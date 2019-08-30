@@ -29,8 +29,9 @@ export default function Colors() {
       </ScrollView>
       <View className="colors-info" style={{ backgroundColor: `${currentColor.hex}` }}>
         <View>{currentColor.name}</View>
+        <View>HEX: {currentColor.hex}</View>
         <View>CMYK: {currentColor.CMYK.toString()}</View>
-        <View>RGB: { currentColor.RGB.toString()}</View>
+        <View>RGB: {currentColor.RGB.toString()}</View>
       </View>
     </View>
   );

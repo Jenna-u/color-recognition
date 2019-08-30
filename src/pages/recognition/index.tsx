@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Canvas, Text } from '@tarojs/components'
+import { View, Canvas, Text, MovableArea, MovableView } from '@tarojs/components'
 import { createPixelArray, rgbToHex } from '../../utils/index'
 import quantize from 'quantize';
 
@@ -18,7 +18,7 @@ export default class Recognition extends Component {
     // [35, 53, 32]
     // ],
     palette: [],
-    currentColor: ['']
+    currentColor: [],
   }
   
   componentDidMount() {
@@ -55,10 +55,10 @@ export default class Recognition extends Component {
       canvasId: 'canvas',
       x: 0,
       y: 0,
-      width: w,
-      height: h,
-      success: (res) => {
-        const { width, height, data } = res
+      width: 100,
+      height: 100,
+    }, this.$scope).then(res => {
+      const { width, height, data } = res
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
@@ -67,8 +67,7 @@ export default class Recognition extends Component {
           palette: colorMap.palette(),
           currentColor: colorMap.map(pixelArray[0])
         })
-      }
-    }, this.$scope)
+    })
   }
 
   handleChange = (c) => {
@@ -79,10 +78,25 @@ export default class Recognition extends Component {
 
   setClipboard = (data) => {
     Taro.setClipboardData({
-      data: data,
-      success: (res) => {
-        console.log('rs', res)
-      }
+      data: data
+    }).then(res => {
+      console.log('res', res)
+    })
+  }
+
+  handleMove = (e) => {
+    const { x, y } = e.detail
+    Taro.canvasGetImageData({
+      canvasId: 'canvas',
+      x,
+      y,
+      width: 1,
+      height: 1,
+    }).then(res => {
+      const { data } = res
+      this.setState({
+        currentColor: [data[0], data[1], data[2]]
+      })
     })
   }
 
@@ -91,10 +105,17 @@ export default class Recognition extends Component {
     return (
       <View className="recognition-container">
         <View className="color-card">
-          <Canvas
-            canvasId="canvas"
-            style='width: 100%; height: 300px;'
-          />
+          <MovableArea style={{ width: '100%', height: '300px' }}>
+            <Canvas
+              canvasId="canvas"
+              style='width: 100%; height: 300px;'
+            />
+            <MovableView
+              className="magnifier"
+              direction="all"
+              onChange={(event) => this.handleMove(event)}
+            >+</MovableView>
+          </MovableArea>
           <View className="color-output">
             <Text>色卡: </Text>
             {palette.map(c =>
