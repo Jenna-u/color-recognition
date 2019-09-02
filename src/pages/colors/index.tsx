@@ -1,6 +1,7 @@
 import Taro, { useState } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import colors from './colors.js'
+import './index.scss'
 
 export default function Colors() {
   const [currentColor, setBg] = useState(colors[0])

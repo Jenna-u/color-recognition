@@ -24,6 +24,7 @@ class App extends Component {
       'pages/colors/index',
       'pages/camera/index',
       'pages/recognition/index',
+      'pages/collection/index'
     ],
     window: {
       backgroundTextStyle: 'light',

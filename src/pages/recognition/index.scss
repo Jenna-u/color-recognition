@@ -1,3 +1,5 @@
+@import "~taro-ui/dist/style/components/tag.scss";
+
 .recognition-container {
   background-color: #f5f6f8;
   padding: 20px;
@@ -45,11 +47,7 @@
 }
 
 .magnifier {
-  width: 60px;
-  height: 60px;
-  background-color: rgba(0,0,0,.2);
-  border: 3px solid #fff;
-  border-radius: 50%;
   vertical-align: middle;
   text-align: center;
+  z-index: 1000;
 }

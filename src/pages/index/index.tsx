@@ -13,7 +13,6 @@ export default function Index() {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
 
-
   // config: Config = {
   //   navigationBarTitleText: '首页'
   // }
@@ -50,7 +49,8 @@ export default function Index() {
 
   const handleChangeTab = (value) => {
     changeTab(value)
-    if(value === 1) Taro.navigateTo({url: '/pages/colors/index'})
+    if (value === 1) Taro.navigateTo({ url: '/pages/colors/index' })
+    if (value === 2) Taro.navigateTo({ url: '/pages/collection/index' })
   }
 
   return (
@@ -73,7 +73,8 @@ export default function Index() {
           fixed
           tabList={[
             { title: '首页', iconType: 'home', },
-            { title: '中国色', iconType: 'heart' }
+            { title: '中国色', iconType: 'heart' },
+            { title: '收藏', iconType: 'star' }
           ]}
           onClick={handleChangeTab}
           current={current}

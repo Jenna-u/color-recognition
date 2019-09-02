@@ -1,23 +1,25 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Canvas, Text, MovableArea, MovableView } from '@tarojs/components'
+import { AtTag } from 'taro-ui'
 import { createPixelArray, rgbToHex } from '../../utils/index'
 import quantize from 'quantize';
+import './index.scss'
 
 export default class Recognition extends Component {
 
   state = {
-    // palette: [[246, 74, 135],
-    // [87, 96, 74],
-    // [171, 196, 168],
-    // [39, 32, 30],
-    // [157, 153, 132],
+    palette: [[246, 74, 135],
+    [87, 96, 74],
+    [171, 196, 168],
+    [39, 32, 30],
+    [157, 153, 132],
     // [127, 154, 114],
     // [215, 209, 194],
     // [135, 160, 136],
     // [174, 175, 178],
     // [35, 53, 32]
-    // ],
-    palette: [],
+    ],
+    // palette: [],
     currentColor: [],
   }
   
@@ -55,10 +57,10 @@ export default class Recognition extends Component {
       canvasId: 'canvas',
       x: 0,
       y: 0,
-      width: 100,
-      height: 100,
-    }, this.$scope).then(res => {
-      const { width, height, data } = res
+      width: w,
+      height: h,
+      success: (res) => {
+        const { width, height, data } = res
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
@@ -67,7 +69,8 @@ export default class Recognition extends Component {
           palette: colorMap.palette(),
           currentColor: colorMap.map(pixelArray[0])
         })
-    })
+      }
+    }, this.$scope)
   }
 
   handleChange = (c) => {
@@ -101,18 +104,27 @@ export default class Recognition extends Component {
   }
 
   render() {
-    const { palette } = this.state
+    const { palette, currentColor } = this.state
     return (
       <View className="recognition-container">
         <View className="color-card">
-          <MovableArea style={{ width: '100%', height: '300px' }}>
+          <MovableArea style={{ width: '100%', height: '300px', pointerEvents: 'none' }}>
             <Canvas
               canvasId="canvas"
-              style='width: 100%; height: 300px;'
+              style='width: 100%; height: 300px; position: absolute, zIndex: 999'
             />
             <MovableView
               className="magnifier"
               direction="all"
+              style={{
+                width: '30px',
+                height: '30px',
+                pointerEvents: 'auto',
+                backgroundColor: 'rgba(0,0,0,.2)',
+                border: '3px solid #fff',
+                borderRadius: '50%',
+                zIndex: 1000
+              }}
               onChange={(event) => this.handleMove(event)}
             >+</MovableView>
           </MovableArea>
@@ -124,13 +136,14 @@ export default class Recognition extends Component {
               </View>
             )}
           </View>
-          {this.state.currentColor.length !== 0 && <View className="color-params">
-          <View className="color-block" style={{ backgroundColor: `#${rgbToHex(this.state.currentColor)}` }} />
-          <View className="color-numerical">
-            <View className="hex" onClick={() => this.setClipboard(`#${rgbToHex(this.state.currentColor)}`)}>HEX: {`#${rgbToHex(this.state.currentColor)}`}</View>
-            <View className="rgb" onClick={() => this.setClipboard(this.state.currentColor.toString())}>RGB: {this.state.currentColor.toString()}</View>
-          </View>
-        </View>}
+          {currentColor.length !== 0 && <View className="color-params">
+            <View className="color-block" style={{ backgroundColor: `#${rgbToHex(currentColor)}` }} />
+            <View className="color-numerical">
+              <View className="hex" onClick={() => this.setClipboard(`#${rgbToHex(currentColor)}`)}>HEX: {`#${rgbToHex(currentColor)}`}</View>
+              <View className="rgb" onClick={() => this.setClipboard(currentColor.toString())}>RGB: {currentColor.toString()}</View>
+            </View>
+          </View>}
+          <AtTag active size="small" type='primary' circle>收藏</AtTag>
         </View>
       </View>
     )
