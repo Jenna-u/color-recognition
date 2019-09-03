@@ -1,0 +1,23 @@
+.colors-container {
+  margin: 0 20px;
+  height: 100vh;
+}
+
+.colors-list {
+  margin-top: 40px;
+  display: flex;
+  border-radius: 18px;
+  justify-content: flex-start;
+  align-self: center;
+
+  .item {
+    flex: 1;
+    height: 80px;
+  }
+}
+
+.copy-icon {
+  margin-left: 10px;
+  line-height: 80px;
+  color: rgba(0,0,0,.5);
+}

@@ -74,7 +74,7 @@ export default function Index() {
           tabList={[
             { title: '首页', iconType: 'home', },
             { title: '中国色', iconType: 'heart' },
-            { title: '收藏', iconType: 'star' }
+            { title: '我的收藏', iconType: 'star' }
           ]}
           onClick={handleChangeTab}
           current={current}

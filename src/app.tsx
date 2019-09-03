@@ -34,7 +34,12 @@ class App extends Component {
     }
   }
 
-  componentDidMount () {}
+  componentDidMount() {
+    Taro.cloud.init({
+      env: 'zhiqiang-cloud-x78sx',
+      traceUser: true,
+    })
+  }
 
   componentDidShow () {}
 
