@@ -103,6 +103,18 @@ export default class Recognition extends Component {
     })
   }
 
+  handleCollection = () => {
+    const db = Taro.cloud.database()
+    const colors = db.collection('colors')
+    db.collection('colors').add({
+      data: {
+        colors: this.state.palette
+      }
+    }).then(res => {
+      console.log('coo', res);
+    })
+  }
+
   render() {
     const { palette, currentColor } = this.state
     return (
@@ -143,7 +155,7 @@ export default class Recognition extends Component {
               <View className="rgb" onClick={() => this.setClipboard(currentColor.toString())}>RGB: {currentColor.toString()}</View>
             </View>
           </View>}
-          <AtTag active size="small" type='primary' circle>收藏</AtTag>
+          <AtTag active size="small" type='primary' circle onClick={this.handleCollection}>收藏</AtTag>
         </View>
       </View>
     )
