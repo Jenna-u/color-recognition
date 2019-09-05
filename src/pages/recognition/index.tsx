@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro';
 import { View, Canvas, Text, MovableArea, MovableView } from '@tarojs/components'
-import { AtTag } from 'taro-ui'
+import { AtTag, AtToast } from 'taro-ui'
 import { createPixelArray, rgbToHex } from '../../utils/index'
 import quantize from 'quantize';
 import './index.scss'
@@ -21,6 +21,10 @@ export default class Recognition extends Component {
     ],
     // palette: [],
     currentColor: [],
+    isOpened: false,
+    msg: '',
+    status: '',
+    duration: 1000
   }
   
   componentDidMount() {
@@ -53,6 +57,12 @@ export default class Recognition extends Component {
   }
 
   getImagePixel = (w: number, h: number) => {
+    this.setState({
+      status: 'loading',
+      msg: '正在加载',
+      isOpened: true,
+      duration: 0
+    })
     Taro.canvasGetImageData({
       canvasId: 'canvas',
       x: 0,
@@ -66,6 +76,7 @@ export default class Recognition extends Component {
         const colorMap = quantize(pixelArray, 5);
         console.log('ssss', data, colorMap);
         this.setState({
+          isOpened: false,
           palette: colorMap.palette(),
           currentColor: colorMap.map(pixelArray[0])
         })
@@ -111,12 +122,18 @@ export default class Recognition extends Component {
         colors: this.state.palette
       }
     }).then(res => {
+      this.setState({
+        isOpened: true,
+        msg: '收藏成功！',
+        status: 'success',
+        duration: 3000,
+      })
       console.log('coo', res);
     })
   }
 
   render() {
-    const { palette, currentColor } = this.state
+    const { palette, currentColor, isOpened, msg, status } = this.state
     return (
       <View className="recognition-container">
         <View className="color-card">
@@ -156,6 +173,7 @@ export default class Recognition extends Component {
             </View>
           </View>}
           <AtTag active size="small" type='primary' circle onClick={this.handleCollection}>收藏</AtTag>
+          <AtToast isOpened={isOpened} text={msg} status={status} duration={0} />
         </View>
       </View>
     )
