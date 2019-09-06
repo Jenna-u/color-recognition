@@ -32,10 +32,8 @@ export default function Collection() {
     db.collection('colors').where({
       _openid: openid,
     }).get().then(res => {
-      console.log('res====', res.data);
       const { data } = res
-      const getColor = data.map(x => x.colors.map(c => rgbToHex(c)))
-      console.log('colors', getColor);
+      const getColor = data.map(x => x.colors)
       getColorList(getColor);
     })
   }

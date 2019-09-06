@@ -119,7 +119,7 @@ export default class Recognition extends Component {
     const colors = db.collection('colors')
     db.collection('colors').add({
       data: {
-        colors: this.state.palette
+        colors: this.state.palette.map(x => rgbToHex(x))
       }
     }).then(res => {
       this.setState({
