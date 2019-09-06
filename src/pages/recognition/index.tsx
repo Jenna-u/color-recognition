@@ -59,7 +59,7 @@ export default class Recognition extends Component {
   getImagePixel = (w: number, h: number) => {
     this.setState({
       status: 'loading',
-      msg: '正在加载',
+      msg: '正在识别',
       isOpened: true,
       duration: 0
     })
@@ -116,7 +116,6 @@ export default class Recognition extends Component {
 
   handleCollection = () => {
     const db = Taro.cloud.database()
-    const colors = db.collection('colors')
     db.collection('colors').add({
       data: {
         colors: this.state.palette.map(x => rgbToHex(x))
@@ -126,7 +125,7 @@ export default class Recognition extends Component {
         isOpened: true,
         msg: '收藏成功！',
         status: 'success',
-        duration: 3000,
+        duration: 1000,
       })
       console.log('coo', res);
     })
@@ -152,11 +151,14 @@ export default class Recognition extends Component {
                 backgroundColor: 'rgba(0,0,0,.2)',
                 border: '3px solid #fff',
                 borderRadius: '50%',
-                zIndex: 1000
+                zIndex: 10000
               }}
               onChange={(event) => this.handleMove(event)}
             >+</MovableView>
           </MovableArea>
+          <View className="collection">
+            <AtTag active size="small" type='primary' circle onClick={this.handleCollection}>收藏</AtTag>
+          </View>
           <View className="color-output">
             <Text>色卡: </Text>
             {palette.map(c =>
@@ -172,7 +174,6 @@ export default class Recognition extends Component {
               <View className="rgb" onClick={() => this.setClipboard(currentColor.toString())}>RGB: {currentColor.toString()}</View>
             </View>
           </View>}
-          <AtTag active size="small" type='primary' circle onClick={this.handleCollection}>收藏</AtTag>
           <AtToast isOpened={isOpened} text={msg} status={status} duration={0} />
         </View>
       </View>

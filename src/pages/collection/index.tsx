@@ -1,12 +1,10 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { rgbToHex } from '../../utils/index'
+import { AtPagination } from 'taro-ui'
 
 import './index.scss'
 
-
 export default function Collection() {
-  // const colors = ['#90b7dd', '#60bad1', '#507fba', '#96d6e0', '#ffb07f']
   const [colors, getColorList] = useState([])
   const [openid, setUserInfo] = useState('')
 
@@ -30,7 +28,7 @@ export default function Collection() {
   const fetchColors = () => {
     const db = Taro.cloud.database();
     db.collection('colors').where({
-      _openid: openid,
+      _openid: openid
     }).get().then(res => {
       const { data } = res
       const getColor = data.map(x => x.colors)
@@ -47,11 +45,19 @@ export default function Collection() {
     <View className="colors-container">
       <View>我的收藏</View>
       <View>
-        {colors.map(x => <View className="colors-list" style={{ height: '80px' }}>
+        {colors.map(x => <View className="colors-list">
           {x.map(c => <View className="item" style={{ backgroundColor: `#${c}` }} />)}
-          <View className="copy-icon" onClick={() => setClipboard(colors)}>复制</View>
+          <View className="copy-icon" onClick={() => setClipboard(x)}>复制</View>
         </View>)}
       </View>
+      {colors.length > 10 && 
+        <AtPagination
+          icon  
+          total={50} 
+          pageSize={10}
+          current={1}
+        />
+      }
     </View>
   )
 }

@@ -1,3 +1,7 @@
+@import "~taro-ui/dist/style/components/pagination.scss";
+@import "~taro-ui/dist/style/components/button.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
+
 .colors-container {
   margin: 0 20px;
   height: 100vh;
@@ -6,13 +10,20 @@
 .colors-list {
   margin-top: 40px;
   display: flex;
-  border-radius: 18px;
   justify-content: flex-start;
   align-self: center;
 
   .item {
     flex: 1;
     height: 80px;
+
+    &:first-child {
+      border-radius: 8px 0 0 8px;
+    }
+
+    &:nth-child(5){
+      border-radius: 0 8px 8px 0;
+    }
   }
 }
 
