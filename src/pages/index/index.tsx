@@ -1,6 +1,7 @@
 import Taro, { useState, Config } from '@tarojs/taro'
-import { View } from '@tarojs/components'
+import { View, Text } from '@tarojs/components'
 import { AtIcon, AtTabBar, AtActionSheet, AtActionSheetItem } from 'taro-ui'
+import title from './title.png'
 import './index.scss'
 
 export default function Index() {
@@ -56,10 +57,18 @@ export default function Index() {
   return (
     <View>
       <View className='index'>
-        <View className='title'>拍照识色</View>
-          <View className='camera-area' onClick={handleChooseImage}>
-            <AtIcon value='camera' size='30' />
+        <View className='title'>
+          {/* <Image src={title} style="width: 244px; height: 44px; margin-top: 15%" /> */}
+          拍照识色
         </View>
+        <View className='camera-area' onClick={handleChooseImage}>
+          <View className="second-circle">
+            <View className="third-circle">
+              <AtIcon className="camera-icon" value='camera' size='50' style={{ paddingTop: '30px', display: 'inline-block' }} />
+            </View>
+          </View>
+        </View>
+        <Text className="tips">点击拍照</Text>
         {/* <AtActionSheet isOpened={isOpened} cancelText='cancel' onCancel={handleClose}>
           <AtActionSheetItem onClick={handleClick}>
             拍照
