@@ -10,9 +10,10 @@ export default function Colors() {
     <View
       className="colors-container"
     >
+      <View className="title">中国色</View>
       <ScrollView
         scrollY
-        className="colors-nav"
+        className="color-picker"
         upperThreshold={10}
         scrollWithAnimation
       >
@@ -22,14 +23,13 @@ export default function Colors() {
               className="colors-item"
               style={{ backgroundColor: `${c.hex}` }}
               onClick={() => setBg(c)}
-            >
-              {c.name}
-            </View>
+            />
           )}
         </View>
       </ScrollView>
       <View className="colors-info" style={{ backgroundColor: `${currentColor.hex}` }}>
-        <View>{currentColor.name}</View>
+        <View style="font-size: 24px;">{currentColor.name}</View>
+        <View style="margin-bottom: 12px;">{currentColor.pinyin}</View>
         <View>HEX: {currentColor.hex}</View>
         <View>CMYK: {currentColor.CMYK.toString()}</View>
         <View>RGB: {currentColor.RGB.toString()}</View>

@@ -8,18 +8,18 @@ import './index.scss'
 export default class Recognition extends Component {
 
   state = {
-    palette: [[246, 74, 135],
-    [87, 96, 74],
-    [171, 196, 168],
-    [39, 32, 30],
-    [157, 153, 132],
+    // palette: [[246, 74, 135],
+    // [87, 96, 74],
+    // [171, 196, 168],
+    // [39, 32, 30],
+    // [157, 153, 132],
     // [127, 154, 114],
     // [215, 209, 194],
     // [135, 160, 136],
     // [174, 175, 178],
     // [35, 53, 32]
-    ],
-    // palette: [],
+    // ],
+    palette: [],
     currentColor: [],
     isOpened: false,
     msg: '',
@@ -38,8 +38,10 @@ export default class Recognition extends Component {
 
       Taro.getImageInfo({ src: imageUrl }).then(res => {
         const { width, height } = res;
+        console.log('width', width, 'height', height)
         let w = width;
         let h = height;
+
         if (width > height) {
           w = parentWidth
           h = height / width * parentWidth
@@ -47,6 +49,7 @@ export default class Recognition extends Component {
           h = parentHeight
           w = width / height * parentHeight
         }
+
         ctx.drawImage(imageUrl, 0, 0, width, height, 0, 0, w, h);
         ctx.draw();
         this.getImagePixel(width, height);
@@ -63,6 +66,7 @@ export default class Recognition extends Component {
       isOpened: true,
       duration: 0
     })
+
     Taro.canvasGetImageData({
       canvasId: 'canvas',
       x: 0,
@@ -139,7 +143,7 @@ export default class Recognition extends Component {
           <MovableArea style={{ width: '100%', height: '300px', pointerEvents: 'none' }}>
             <Canvas
               canvasId="canvas"
-              style='width: 100%; height: 300px; position: absolute, zIndex: 999'
+              style='width: 100%; height: 300px;'
             />
             <MovableView
               className="magnifier"
@@ -151,7 +155,6 @@ export default class Recognition extends Component {
                 backgroundColor: 'rgba(0,0,0,.2)',
                 border: '3px solid #fff',
                 borderRadius: '50%',
-                zIndex: 10000
               }}
               onChange={(event) => this.handleMove(event)}
             >+</MovableView>

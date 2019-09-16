@@ -58,8 +58,8 @@ export default function Index() {
     <View>
       <View className='index'>
         <View className='title'>
-          {/* <Image src={title} style="width: 244px; height: 44px; margin-top: 15%" /> */}
-          拍照识色
+          <Image src={title} style="width: 222px; height: 44px;" />
+          {/* 拍照识色 */}
         </View>
         <View className='camera-area' onClick={handleChooseImage}>
           <View className="second-circle">
