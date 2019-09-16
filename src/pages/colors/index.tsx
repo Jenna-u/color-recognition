@@ -10,7 +10,7 @@ export default function Colors() {
     <View
       className="colors-container"
     >
-      <View className="title">中国色</View>
+      <View className="title">中国传统颜色</View>
       <ScrollView
         scrollY
         className="color-picker"
