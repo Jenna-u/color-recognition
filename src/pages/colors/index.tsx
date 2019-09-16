@@ -20,7 +20,7 @@ export default function Colors() {
         <View className="colors-list">
           {colors.map(c =>
             <View
-              className="colors-item"
+              className={ currentColor.hex === c.hex ? 'colors-item active' : 'colors-item' }
               style={{ backgroundColor: `${c.hex}` }}
               onClick={() => setBg(c)}
             />
