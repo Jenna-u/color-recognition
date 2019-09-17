@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro';
-import { View, Canvas, Text, MovableArea, MovableView } from '@tarojs/components'
+import { View, Canvas, Text } from '@tarojs/components'
 import { AtTag, AtToast } from 'taro-ui'
 import { createPixelArray, rgbToHex } from '../../utils/index'
 import quantize from 'quantize';
@@ -102,26 +102,11 @@ export default class Recognition extends Component {
     })
   }
 
-  handleMove = (e) => {
-    const { x, y } = e.detail
-    Taro.canvasGetImageData({
-      canvasId: 'canvas',
-      x,
-      y,
-      width: 1,
-      height: 1,
-    }).then(res => {
-      const { data } = res
-      this.setState({
-        currentColor: [data[0], data[1], data[2]]
-      })
-    })
-  }
-
   handleCollection = () => {
     const db = Taro.cloud.database()
     db.collection('colors').add({
       data: {
+        imgUrl: this.$router.params.imageUrl,
         colors: this.state.palette.map(x => rgbToHex(x))
       }
     }).then(res => {
@@ -140,25 +125,10 @@ export default class Recognition extends Component {
     return (
       <View className="recognition-container">
         <View className="color-card">
-          <MovableArea style={{ width: '100%', height: '300px', pointerEvents: 'none' }}>
             <Canvas
               canvasId="canvas"
               style='width: 100%; height: 300px;'
             />
-            <MovableView
-              className="magnifier"
-              direction="all"
-              style={{
-                width: '30px',
-                height: '30px',
-                pointerEvents: 'auto',
-                backgroundColor: 'rgba(0,0,0,.2)',
-                border: '3px solid #fff',
-                borderRadius: '50%',
-              }}
-              onChange={(event) => this.handleMove(event)}
-            >+</MovableView>
-          </MovableArea>
           <View className="collection">
             <AtTag active size="small" type='primary' circle onClick={this.handleCollection}>收藏</AtTag>
           </View>

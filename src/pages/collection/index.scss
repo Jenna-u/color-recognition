@@ -2,28 +2,45 @@
 @import "~taro-ui/dist/style/components/button.scss";
 @import "~taro-ui/dist/style/components/icon.scss";
 
-.colors-container {
-  margin: 0 20px;
-  height: 100vh;
+.collection-container {
+  background-color: #f8f6f9;
+
+  .my-collection {
+    position: fixed;
+    left: calc(50% - 100px);
+    top: 10px;
+    font-size: 60px;
+    text-align: center;
+  }
+}
+
+.list-container {
+  margin: 0 40px;
+}
+
+.collection-card {
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 20px solid #fff;
 }
 
 .colors-list {
-  margin-top: 40px;
   display: flex;
   justify-content: flex-start;
   align-self: center;
+  background-color: #fff;
 
   .item {
     flex: 1;
-    height: 80px;
+    height: 40px;
 
-    &:first-child {
-      border-radius: 8px 0 0 8px;
-    }
+    // &:first-child {
+    //   border-radius: 8px 0 0 8px;
+    // }
 
-    &:nth-child(5){
-      border-radius: 0 8px 8px 0;
-    }
+    // &:nth-child(5){
+    //   border-radius: 0 8px 8px 0;
+    // }
   }
 }
 
@@ -31,4 +48,14 @@
   margin-left: 10px;
   line-height: 80px;
   color: rgba(0,0,0,.5);
+}
+
+
+.operator {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100px;
+  background-color: #fafafa;
+  color: #999;
 }
