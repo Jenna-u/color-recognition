@@ -14,9 +14,9 @@ export default function Index() {
    * 提示和声明 navigationBarTextStyle: 'black' | 'white' 类型冲突, 需要显示声明类型
    */
 
-  // config: Config = {
-  //   navigationBarTitleText: '首页'
-  // }
+  Index.config = {
+    navigationBarTitleText: '首页'
+  }
 
   // const [isOpened, setOpened] = useState(false)
   const [current, changeTab] = useState(0)

@@ -1,10 +1,15 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Image, MovableArea, MovableView } from '@tarojs/components'
-import { AtPagination, AtToast } from 'taro-ui'
+import { AtToast } from 'taro-ui'
 
 import './index.scss'
 
 export default function Collection() {
+
+  Collection.config = {
+    navigationBarTitleText: '我的收藏'
+  }
+
   const [collectionList, getColorList] = useState([])
   const [openid, setUserInfo] = useState('')
   const [toast, setToast] = useState({isOpened: false, msg: '', status: ''})
@@ -76,7 +81,7 @@ export default function Collection() {
 
   return (
     <View className="collection-container">
-      <View className="my-collection">我的收藏</View>
+      {/* <View className="my-collection">我的收藏</View> */}
       <View className="list-container">
         {collectionList.map(x =>
           <View className="collection-card">
