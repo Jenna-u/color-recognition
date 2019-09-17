@@ -1,12 +1,13 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Image, MovableArea, MovableView } from '@tarojs/components'
-import { AtPagination } from 'taro-ui'
+import { AtPagination, AtToast } from 'taro-ui'
 
 import './index.scss'
 
 export default function Collection() {
   const [collectionList, getColorList] = useState([])
   const [openid, setUserInfo] = useState('')
+  const [toast, setToast] = useState({isOpened: false, msg: '', status: ''})
 
   const setClipboard = (data) => {
     Taro.setClipboardData({
@@ -31,8 +32,22 @@ export default function Collection() {
       _openid: openid
     }).get().then(res => {
       const { data } = res
-      const getColor = data.map(x => ({ colors: x.colors, imgUrl: x.imgUrl }))
+      const getColor = data.map(x => ({ id: x._id, colors: x.colors, imgUrl: x.imgUrl }))
       getColorList(getColor);
+    })
+  }
+
+  const handleRemove = (id) => {
+    const db = Taro.cloud.database()
+    db.collection('colors').doc(id).remove({
+      success: (res) => {
+        setToast({
+          isOpened: true,
+          msg: '数据删除成功！',
+          status: 'success'
+        })
+        fetchColors()
+      }
     })
   }
 
@@ -61,7 +76,7 @@ export default function Collection() {
 
   return (
     <View className="collection-container">
-      <View>我的收藏</View>
+      <View className="my-collection">我的收藏</View>
       <View className="list-container">
         {collectionList.map(x =>
           <View className="collection-card">
@@ -87,19 +102,12 @@ export default function Collection() {
             <View className="operator">
               <View onClick={() => setClipboard(x)}>复制</View> |
               <View>导出</View> |
-              <View>删除</View>
+              <View onClick={() => handleRemove(x.id)}>删除</View>
               </View>
           </View>
         )}
       </View>
-      {collectionList.length > 10 && 
-        <AtPagination
-          icon
-          total={50} 
-          pageSize={10}
-          current={1}
-        />
-      }
+      <AtToast isOpened={toast.isOpened} text={toast.msg} status={toast.status} duration={1000} />
     </View>
   )
 }

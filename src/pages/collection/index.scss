@@ -1,16 +1,12 @@
 @import "~taro-ui/dist/style/components/pagination.scss";
-@import "~taro-ui/dist/style/components/button.scss";
-@import "~taro-ui/dist/style/components/icon.scss";
+@import "~taro-ui/dist/style/components/toast.scss";
 
 .collection-container {
   background-color: #f8f6f9;
 
   .my-collection {
-    position: fixed;
-    left: calc(50% - 100px);
-    top: 10px;
-    font-size: 60px;
-    text-align: center;
+    margin: 30px 0 0 20px;
+    font-size: 40px;
   }
 }
 
