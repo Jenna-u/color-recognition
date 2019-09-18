@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Image, MovableArea, MovableView } from '@tarojs/components'
-
+import { showToast, hideToast } from '../../utils/index'
 import './index.scss'
 
 export default function Collection() {
@@ -11,7 +11,6 @@ export default function Collection() {
 
   const [collectionList, getColorList] = useState([])
   const [openid, setUserInfo] = useState('')
-  const [toast, setToast] = useState({isOpened: false, msg: '', status: ''})
 
   const setClipboard = (data) => {
     Taro.setClipboardData({
@@ -31,18 +30,18 @@ export default function Collection() {
   }
 
   const fetchColors = () => {
-    Taro.showToast({
+    showToast({
       title: '数据加载中...',
       mask: true,
       icon: 'loading',
       duration: 0
     })
-
+  
     const db = Taro.cloud.database();
-    db.collection('colors').where({
+    db.collection('colors').orderBy('_id', 'desc').where({
       _openid: openid
     }).get().then(res => {
-      Taro.hideToast();
+      hideToast();
       const { data } = res
       const getColor = data.map(x => ({ id: x._id, colors: x.colors, imgUrl: x.imgUrl }))
       getColorList(getColor);
@@ -53,7 +52,7 @@ export default function Collection() {
     const db = Taro.cloud.database()
     db.collection('colors').doc(id).remove({
       success: (res) => {
-        Taro.showToast({
+        showToast({
           title: '删除成功！',
           icon: 'success',
           mask: true,
@@ -84,8 +83,6 @@ export default function Collection() {
     getUserInfo()
     fetchColors()
   }, [])
-
-  console.log('ccc', collectionList);
 
   return (
     <View className="collection-container">

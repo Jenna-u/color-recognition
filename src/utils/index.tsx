@@ -1,3 +1,5 @@
+import Taro from '@tarojs/taro'
+
 export function createPixelArray(imgData, pixelCount, quality) {
   const pixels = imgData;
   const pixelArray = [];
@@ -27,4 +29,12 @@ export function rgbToHex(rgb) {
 
 export function rgbToCMYK(rgb) {
   
+}
+
+export function showToast(obj) {
+  return Taro.showToast(obj)
+}
+
+export function hideToast() {
+  return Taro.hideToast()
 }

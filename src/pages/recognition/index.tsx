@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro';
 import { View, Canvas, Text, CoverImage } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import { createPixelArray, rgbToHex } from '../../utils/index'
+import { createPixelArray, rgbToHex, showToast, hideToast } from '../../utils/index'
 import quantize from 'quantize';
 import './index.scss'
 
@@ -51,14 +51,7 @@ export default class Recognition extends Component {
   }
 
   getImagePixel = (w: number, h: number) => {
-    // this.setState({
-    //   status: 'loading',
-    //   msg: '正在识别',
-    //   isOpened: true,
-    //   duration: 0
-    // })
-
-    Taro.showToast({
+    showToast({
       title: '正在识别中...',
       icon: 'loading',
       mask: true,
@@ -83,7 +76,7 @@ export default class Recognition extends Component {
           currentColor: colorMap.map(pixelArray[0])
         })
 
-        Taro.hideToast()
+        hideToast()
       }
     }, this.$scope)
   }
@@ -110,7 +103,7 @@ export default class Recognition extends Component {
         colors: this.state.palette.map(x => rgbToHex(x))
       }
     }).then(res => {
-      Taro.showToast({
+      showToast({
         title: '收藏成功！',
         icon: 'success',
         mask: true,
