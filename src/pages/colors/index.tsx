@@ -9,7 +9,7 @@ export default function Colors() {
     navigationBarTitleText: '中国色'
   }
 
-  const [currentColor, setBg] = useState(colors[0])
+  const [currentColor, setBg] = useState(colors[4])
 
   return (
     <View

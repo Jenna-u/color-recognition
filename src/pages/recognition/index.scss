@@ -1,7 +1,4 @@
 @import "~taro-ui/dist/style/components/tag.scss";
-@import "~taro-ui/dist/style/components/toast.scss";
-@import "~taro-ui/dist/style/components/icon.scss";
-
 .recognition-container {
   background-color: #f5f6f8;
   padding: 20px;
@@ -11,7 +8,6 @@
   margin: 20px;
   border: 20px solid #fdfdfd;
   border-radius: 10px;
-  overflow: hidden;
   background-color: #fff;
 }
 
@@ -56,4 +52,11 @@
 
 .collection {
   text-align: right;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  transform: rotate(360deg);
+  transition: all 1s ease-in;
 }

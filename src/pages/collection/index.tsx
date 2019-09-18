@@ -1,6 +1,5 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Image, MovableArea, MovableView } from '@tarojs/components'
-import { AtToast } from 'taro-ui'
 
 import './index.scss'
 
@@ -32,10 +31,18 @@ export default function Collection() {
   }
 
   const fetchColors = () => {
+    Taro.showToast({
+      title: '数据加载中...',
+      mask: true,
+      icon: 'loading',
+      duration: 0
+    })
+
     const db = Taro.cloud.database();
     db.collection('colors').where({
       _openid: openid
     }).get().then(res => {
+      Taro.hideToast();
       const { data } = res
       const getColor = data.map(x => ({ id: x._id, colors: x.colors, imgUrl: x.imgUrl }))
       getColorList(getColor);
@@ -46,10 +53,11 @@ export default function Collection() {
     const db = Taro.cloud.database()
     db.collection('colors').doc(id).remove({
       success: (res) => {
-        setToast({
-          isOpened: true,
-          msg: '数据删除成功！',
-          status: 'success'
+        Taro.showToast({
+          title: '删除成功！',
+          icon: 'success',
+          mask: true,
+          duration: 1000,
         })
         fetchColors()
       }
@@ -86,7 +94,7 @@ export default function Collection() {
         {collectionList.map(x =>
           <View className="collection-card">
             {/* <MovableArea style={{ width: '100%', height: '200px', pointerEvents: 'none' }}> */}
-            <Image mode="aspectFill" style="display: block; width: 100%; height: 200px" src='https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg' />
+            <Image mode="aspectFill" style="display: block; width: 100%; height: 200px" src={x.imgUrl} />
             {/* <MovableView
               className="magnifier"
               direction="all"
@@ -112,7 +120,6 @@ export default function Collection() {
           </View>
         )}
       </View>
-      <AtToast isOpened={toast.isOpened} text={toast.msg} status={toast.status} duration={1000} />
     </View>
   )
 }
