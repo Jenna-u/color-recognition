@@ -1,6 +1,7 @@
 @import "~taro-ui/dist/style/components/toast.scss";
 
 .collection-container {
+  padding: 10px 0 40px 0;
   background-color: #f8f6f9;
 
   .my-collection {
@@ -15,29 +16,18 @@
 
 .collection-card {
   border-radius: 10px;
-  margin-top: 20px;
+  margin-top: 40px;
   border: 20px solid #fff;
 }
 
 .colors-list {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-self: center;
-  margin: 10px 0 20px  0;
-  border: 1px solid 1px solid rgba(0,0,0,.1);
-  border-radius: 8px;
 
   .item {
     flex: 1;
     height: 40px;
-
-    &:first-child {
-      border-radius: 8px 0 0 8px;
-    }
-
-    &:nth-child(5){
-      border-radius: 0 8px 8px 0;
-    }
   }
 }
 
@@ -45,8 +35,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  border-top: 1px solid rgba(0,0,0,.1);
-  height: 100px;
-  background-color: #fafafa;
-  color: #999;
+  height: 60px;
+  background-color: #fff;
+  color: rgba(0,0,0,.45);
 }

@@ -86,7 +86,7 @@ export default function Collection() {
         {collectionList.map(x =>
           <View className="collection-card">
             {/* <MovableArea style={{ width: '100%', height: '200px', pointerEvents: 'none' }}> */}
-            <Image mode="aspectFill" style="display: block; width: 100%; height: 200px" src={x.imgUrl} />
+            <Image mode="aspectFill" style="display: block; width: 100%; height: 200px" src='https://res.wx.qq.com/wxdoc/dist/assets/img/0.4cb08bb4.jpg' />
             {/* <MovableView
               className="magnifier"
               direction="all"

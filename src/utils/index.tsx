@@ -20,7 +20,7 @@ export function createPixelArray(imgData, pixelCount, quality) {
 }
 
 export function rgbToHex(rgb) {
-  return rgb.map(x => parseInt(x).toString(16)).join('')
+  return rgb.map(x => { x === 0 ? x.toString(16).repeat(2) : x.toString(16) }).join('')
 }
 
 export function rgbToCMYK(rgb) {
