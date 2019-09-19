@@ -1,5 +1,6 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Image, MovableArea, MovableView } from '@tarojs/components'
+import { AtIcon } from 'taro-ui'
 import { showToast, hideToast } from '../../utils/index'
 import './index.scss'
 
@@ -84,11 +85,12 @@ export default function Collection() {
     fetchColors()
   }, [])
 
+  // const temp = []
+
   return (
     <View className="collection-container">
-      {/* <View className="my-collection">我的收藏</View> */}
       <View className="list-container">
-        {collectionList.map(x =>
+        {collectionList.length ? collectionList.map(x =>
           <View className="collection-card">
             {/* <MovableArea style={{ width: '100%', height: '200px', pointerEvents: 'none' }}> */}
             <Image mode="aspectFill" style="display: block; width: 100%; height: 200px" src={x.imgUrl} />
@@ -115,7 +117,10 @@ export default function Collection() {
               <View onClick={() => handleRemove(x.id)}>删除</View>
               </View>
           </View>
-        )}
+        ) : <View className="empty">
+              <AtIcon value='icon icon-empty' size='30' />
+              暂时没有数据，快去收藏吧~
+            </View>}
       </View>
     </View>
   )

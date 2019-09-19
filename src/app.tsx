@@ -2,6 +2,7 @@ import Taro, { Component, Config } from '@tarojs/taro'
 import Index from './pages/index'
 
 import './app.scss'
+import './icon/iconfont.scss'
 
 // 如果需要在 h5 环境中开启 React Devtools
 // 取消以下注释：
@@ -32,6 +33,22 @@ class App extends Component {
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: 'black'
     },
+    // tabBar: {
+    //   selectedColor: '#',
+    //   list: [
+    //     {
+    //       text: "首页",
+    //       pagePath:'pages/index/index',
+    //       selectedIconPath: "",
+    //     }, {
+    //       text: "中国色",
+    //       pagePath:'pages/colors/index',
+    //     }, {
+    //       text: "我的收藏",
+    //       pagePath:'pages/collection/index',
+    //     }
+    //   ]
+    // },
     cloud: true
   }
 

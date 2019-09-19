@@ -2,6 +2,7 @@ import Taro, { useState, Config } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtIcon, AtTabBar, AtActionSheet, AtActionSheetItem } from 'taro-ui'
 import title from './title.png'
+import cameraIcon from './icon.png'
 import './index.scss'
 
 export default function Index() {
@@ -58,35 +59,27 @@ export default function Index() {
     <View>
       <View className='index'>
         <View className='title'>
-          <Image src={title} style="width: 222px; height: 44px;" />
-          {/* 拍照识色 */}
+          <Image mode="aspectFill" src={title} style="width: 222px; height: 44px;" />
         </View>
         <View className='camera-area' onClick={handleChooseImage}>
           <View className="second-circle">
             <View className="third-circle">
-              <AtIcon className="camera-icon" value='camera' size='50' style={{ paddingTop: '30px', display: 'inline-block' }} />
+              <AtIcon className="camera-icon" value='icon icon-xiangji' size='60' color="#6B400D" style={{ paddingTop: '30px', display: 'inline-block' }} />
+              {/* <Image src={cameraIcon} style="width: 50px; height: 50px" /> */}
             </View>
           </View>
         </View>
         <Text className="tips">点击拍照</Text>
-        {/* <AtActionSheet isOpened={isOpened} cancelText='cancel' onCancel={handleClose}>
-          <AtActionSheetItem onClick={handleClick}>
-            拍照
-          </AtActionSheetItem>
-          <AtActionSheetItem onClick={handleChooseImage}>
-            从系统相册选择
-          </AtActionSheetItem>
-        </AtActionSheet> */}
       </View>
       <AtTabBar
-          fixed
-          tabList={[
-            { title: '首页', iconType: 'home', },
-            { title: '中国色', iconType: 'heart' },
-            { title: '我的收藏', iconType: 'tag' }
-          ]}
-          onClick={handleChangeTab}
-          current={current}
+        fixed
+        tabList={[
+          { title: '首页', iconType: 'icon icon-shouye', },
+          { title: '中国色', iconType: 'icon icon-zhongguojie' },
+          { title: '我的收藏', iconType: 'icon icon-shoucang_' }
+        ]}
+        onClick={handleChangeTab}
+        current={current}
         />
       </View>
   )

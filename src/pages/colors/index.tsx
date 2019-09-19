@@ -6,7 +6,7 @@ import './index.scss'
 export default function Colors() {
 
   Colors.config = {
-    navigationBarTitleText: '中国色'
+    navigationBarTitleText: '中国色',
   }
 
   const [currentColor, setBg] = useState(colors[4])
