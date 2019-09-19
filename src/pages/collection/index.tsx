@@ -39,12 +39,12 @@ export default function Collection() {
     })
   
     const db = Taro.cloud.database();
-    db.collection('colors').orderBy('_id', 'desc').where({
+    db.collection('colors').where({
       _openid: openid
     }).get().then(res => {
       hideToast();
       const { data } = res
-      const getColor = data.map(x => ({ id: x._id, colors: x.colors, imgUrl: x.imgUrl }))
+      const getColor = data.map(x => ({ id: x._id, colors: x.colors, imgUrl: x.imgUrl })).reverse()
       getColorList(getColor);
     })
   }
@@ -85,8 +85,6 @@ export default function Collection() {
     fetchColors()
   }, [])
 
-  // const temp = []
-
   return (
     <View className="collection-container">
       <View className="list-container">
@@ -118,8 +116,8 @@ export default function Collection() {
               </View>
           </View>
         ) : <View className="empty">
-              <AtIcon value='icon icon-empty' size='30' />
-              暂时没有数据，快去收藏吧~
+              <AtIcon className="empty-icon" value='icon icon-ku' size='80' />
+              <View>暂时没有数据，快去收藏吧~</View>
             </View>}
       </View>
     </View>

@@ -1,4 +1,4 @@
-@import "~taro-ui/dist/style/components/toast.scss";
+@import "~taro-ui/dist/style/components/icon.scss";
 
 .collection-container {
   padding: 10px 0 40px 0;
@@ -38,7 +38,11 @@
 .empty {
   height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   color: #999;
+
+  .empty-icon {
+    padding-top: 100px;
+  }
 }

@@ -22,13 +22,7 @@ export function createPixelArray(imgData, pixelCount, quality) {
 }
 
 export function rgbToHex(rgb) {
-  return rgb.map(x => {
-    return x === 0 ? x.toString(16).repeat(2) : x.toString(16)
-  }).join('')
-}
-
-export function rgbToCMYK(rgb) {
-  
+  return ((rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).padStart(6, '0');
 }
 
 export function showToast(obj) {

@@ -82,6 +82,7 @@ export default class Recognition extends Component {
   }
 
   handleChange = (c) => {
+    console.log('cccc', c)
     this.setState({
       currentColor: c
     })
