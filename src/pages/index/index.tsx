@@ -12,7 +12,7 @@ export default function Index() {
   const handleChooseImage = () => {
     Taro.chooseImage({
       count: 1,
-      sizeType: ['compressed'],
+      sizeType: ['original','compressed'],
       sourceType: ['album', 'camera'],
     }).then(res => {
       const imageUrl = res.tempFilePaths[0]

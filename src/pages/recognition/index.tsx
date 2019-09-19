@@ -27,11 +27,9 @@ export default class Recognition extends Component {
     //选择id
     query.select('.color-card').boundingClientRect((rect) => {
       const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
-      console.log(parentWidth, 'parentWidth')
-
       Taro.getImageInfo({ src: imageUrl }).then(res => {
         const { width, height } = res;
-        console.log('width', width, 'height', height)
+        // console.log('width', width, 'height', height)
         let w = width;
         let h = height;
 
@@ -69,7 +67,7 @@ export default class Recognition extends Component {
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
-        console.log('ssss', data, colorMap.map(pixelArray[0]));
+        console.log('ssss',res, data, colorMap.map(pixelArray[0]));
         this.setState({
           isOpened: false,
           palette: colorMap.palette(),
@@ -80,7 +78,7 @@ export default class Recognition extends Component {
             icon: 'success',
             mask: true,
             duration: 1000
-          })  
+          })
         })
       }
     }, this.$scope)
@@ -113,7 +111,10 @@ export default class Recognition extends Component {
         title: '收藏成功！',
         icon: 'success',
         mask: true,
-        duration: 1000
+        duration: 1000,
+        success: (res) => {
+          Taro.reLaunch({url: '/pages/collection/index'})
+        }
       })
     })
   }
