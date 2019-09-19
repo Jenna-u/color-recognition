@@ -74,9 +74,14 @@ export default class Recognition extends Component {
           isOpened: false,
           palette: colorMap.palette(),
           currentColor: colorMap.map(pixelArray[0])
+        }, () => {
+          showToast({
+            title: '识别成功!',
+            icon: 'success',
+            mask: true,
+            duration: 1000
+          })  
         })
-
-        hideToast()
       }
     }, this.$scope)
   }
@@ -108,9 +113,8 @@ export default class Recognition extends Component {
         title: '收藏成功！',
         icon: 'success',
         mask: true,
-        duration: 1000,
+        duration: 1000
       })
-      console.log('coo', res);
     })
   }
 

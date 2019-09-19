@@ -88,10 +88,10 @@ export default function Collection() {
   return (
     <View className="collection-container">
       <View className="list-container">
-        {collectionList.length ? collectionList.map(x =>
+        {collectionList.length ? collectionList.map((x, index) =>
           <View className="collection-card">
             {/* <MovableArea style={{ width: '100%', height: '200px', pointerEvents: 'none' }}> */}
-            <Image mode="aspectFill" style="display: block; width: 100%; height: 200px" src={x.imgUrl} />
+            <Image mode="aspectFill" style="display: block; width: 100%; height: 260px" src={x.imgUrl} />
             {/* <MovableView
               className="magnifier"
               direction="all"
@@ -110,8 +110,8 @@ export default function Collection() {
               {x.colors.map(c => <View className="item" style={{ backgroundColor: `#${c}` }} />)}
             </View>
             <View className="operator">
-              <View onClick={() => setClipboard(x)}>复制</View> |
-              <View>导出</View> |
+              <View onClick={() => setClipboard(x.colors)}>复制</View> |
+              {/* <View>导出</View> | */}
               <View onClick={() => handleRemove(x.id)}>删除</View>
               </View>
           </View>
