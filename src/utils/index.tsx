@@ -13,7 +13,7 @@ export function createPixelArray(imgData, pixelCount, quality) {
 
       // If pixel is mostly opaque and not white
       if (typeof a === 'undefined' || a >= 125) {
-          if (!(r > 255 && g > 255 && b > 255)) {
+          if (!(r > 250 && g > 250 && b > 250)) {
               pixelArray.push([r, g, b]);
           }
       }
@@ -22,7 +22,7 @@ export function createPixelArray(imgData, pixelCount, quality) {
 }
 
 export function rgbToHex(rgb) {
-  return ((rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).padStart(6, '0');
+  return ((rgb[0] << 16) + (rgb[1] << 8) + rgb[2]).toString(16).padStart(6, '0').toUpperCase();
 }
 
 export function showToast(obj) {

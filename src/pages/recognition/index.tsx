@@ -14,13 +14,11 @@ export default class Recognition extends Component {
   state = {
     palette: [],
     currentColor: [],
-    isOpened: false,
-    msg: '',
-    status: '',
-    duration: 3000
+    canvasW: '100%',
+    canvasH: '80vh'
   }
   
-  componentDidMount() {
+   componentDidMount() {
     const ctx = Taro.createCanvasContext('canvas', this.$scope);
     const imageUrl = this.$router.params.imageUrl
     const query = Taro.createSelectorQuery();
@@ -29,17 +27,23 @@ export default class Recognition extends Component {
       const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
       Taro.getImageInfo({ src: imageUrl }).then(res => {
         const { width, height } = res;
-        // console.log('width', width, 'height', height)
+        console.log('width', width, 'height', height)
         let w = width;
         let h = height;
 
         if (width > height) {
           w = parentWidth
-          h = height / width * parentWidth
+          h = Math.floor(height / width * parentWidth)
         } else {
           h = parentHeight
-          w = width / height * parentHeight
+          w = Math.floor(width / height * parentHeight)
         }
+
+        this.setState({
+          canvasH: h + 'px'
+        })
+
+        console.log('w', w, 'h', h, parentWidth, parentHeight)
 
         ctx.drawImage(imageUrl, 0, 0, width, height, 0, 0, w, h);
         ctx.draw();
@@ -48,7 +52,7 @@ export default class Recognition extends Component {
     }).exec();    
   }
 
-  getImagePixel = (w: number, h: number) => {
+  getImagePixel = async(w: number, h: number) => {
     showToast({
       title: '正在识别中...',
       icon: 'loading',
@@ -56,7 +60,7 @@ export default class Recognition extends Component {
       duration: 0
     })
 
-    Taro.canvasGetImageData({
+    await Taro.canvasGetImageData({
       canvasId: 'canvas',
       x: 0,
       y: 0,
@@ -67,7 +71,7 @@ export default class Recognition extends Component {
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
-        console.log('ssss',res, data, colorMap.map(pixelArray[0]));
+        console.log('ssss', data, pixelArray);
         this.setState({
           isOpened: false,
           palette: colorMap.palette(),
@@ -120,16 +124,14 @@ export default class Recognition extends Component {
   }
 
   render() {
-    const { palette, currentColor } = this.state
+    const { palette, currentColor, canvasW, canvasH } = this.state
     return (
       <View className="recognition-container">
         <View className="color-card">
           <Canvas
             canvasId="canvas"
-            style='width: 100%; height: 300px;'
-          >
-            <CoverImage src={this.$router.params.imageUrl} />
-          </Canvas>
+            style={{ width: canvasW, height: canvasH }}
+          />
           {palette.length > 0 &&
             <View  style="height: 200px;">
               <View className="collection">
