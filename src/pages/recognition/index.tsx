@@ -46,8 +46,7 @@ export default class Recognition extends Component {
         console.log('w', w, 'h', h, parentWidth, parentHeight)
 
         ctx.drawImage(imageUrl, 0, 0, width, height, 0, 0, w, h);
-        ctx.draw();
-        this.getImagePixel(width, height);
+        ctx.draw(false, () => this.getImagePixel(width, height));
       })
     }).exec();    
   }
