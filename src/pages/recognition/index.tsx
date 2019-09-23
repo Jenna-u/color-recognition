@@ -1,7 +1,7 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, Canvas, Text, CoverImage } from '@tarojs/components'
+import { View, Canvas, Text } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
-import { createPixelArray, rgbToHex, showToast, hideToast } from '../../utils/index'
+import { createPixelArray, rgbToHex, showToast } from '../../utils/index'
 import quantize from 'quantize';
 import './index.scss'
 
@@ -27,7 +27,6 @@ export default class Recognition extends Component {
       const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
       Taro.getImageInfo({ src: imageUrl }).then(res => {
         const { width, height } = res;
-        console.log('width', width, 'height', height)
         let w = width;
         let h = height;
 
@@ -42,8 +41,6 @@ export default class Recognition extends Component {
         this.setState({
           canvasH: h + 'px'
         })
-
-        console.log('w', w, 'h', h, parentWidth, parentHeight)
 
         ctx.drawImage(imageUrl, 0, 0, width, height, 0, 0, w, h);
         ctx.draw(false, () => this.getImagePixel(width, height));

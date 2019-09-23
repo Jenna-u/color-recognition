@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import title from './title.png'
 import cameraIcon from './icon.png'
@@ -9,8 +9,8 @@ export default function Index() {
     navigationBarTitleText: '首页'
   }
 
-  const handleChooseImage = () => {
-    Taro.chooseImage({
+  const handleChooseImage = async() => {
+    await Taro.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album', 'camera'],
