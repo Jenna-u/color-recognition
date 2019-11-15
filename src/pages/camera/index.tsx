@@ -1,5 +1,5 @@
 import Taro, { useState } from '@tarojs/taro';
-import { View, Camera, Button, Image } from '@tarojs/components'
+import { View, Camera, Button, Image, CoverView } from '@tarojs/components'
 
 export default function CameraIndex() {
   const cameraContext = Taro.createCameraContext()
@@ -18,7 +18,6 @@ export default function CameraIndex() {
 
   const handleCancel = () => {
     setImage('');
-
   }
 
   const handleConfirm = () => {
@@ -38,19 +37,19 @@ export default function CameraIndex() {
         <Camera
           devicePosition="back"
           flash="off"
-          style="width: 100%; height: 100vh;"
+          style="width: 100%; height: 70vh;"
         />
       }
-      <View className="camera-control">
-        <View className="button-group">
-          {imageUrl && <View className="cancel" onClick={handleCancel}>Cancel</View>}
-        <Button
-          className="take-photo"
-          onClick={handleCamera}
-        />
-          {imageUrl && <View onClick={handleConfirm}>Use Photo</View>}
-        </View>
-      </View>
+      <CoverView className="camera-control">
+        <CoverView className="button-group">
+          {imageUrl && <CoverView className="cancel" onClick={handleCancel}>返回</CoverView>}
+          <CoverView
+            className="take-photo"
+            onClick={handleCamera}
+          />
+          {imageUrl && <CoverView onClick={handleConfirm}>ok</CoverView>}
+        </CoverView>
+      </CoverView>
     </View>
   )
 }
