@@ -24,8 +24,6 @@ export default function CameraIndex() {
     Taro.reLaunch({url: `/pages/recognition/index?imageUrl=${imageUrl}`})
   }
 
-  console.log('url', imageUrl);
-
   return (
     <View className='camera-index'>
       {
@@ -37,7 +35,7 @@ export default function CameraIndex() {
         <Camera
           devicePosition="back"
           flash="off"
-          style="width: 100%; height: 70vh;"
+          style="width: 100%; height: 80vh;"
         />
       }
       <CoverView className="camera-control">

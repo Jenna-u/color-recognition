@@ -1,6 +1,6 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
-import colors from './colors.js'
+import { showToast, hideToast } from '../../utils/index'
 import './index.scss'
 
 export default function Colors() {
@@ -10,6 +10,29 @@ export default function Colors() {
   }
 
   const [currentColor, setBg] = useState(colors[4])
+  const [chinaColors, getChinaColor] = useState([])
+
+  const getChinaColorData = async () => {
+    showToast({
+      title: '数据加载中...',
+      mask: true,
+      icon: 'loading',
+      duration: 0
+    })
+
+    Taro.cloud.callFunction({
+      name: 'getChinaColors',
+      complete: res => {
+        const { result: { data } } = res
+        hideToast()
+        getChinaColor(data);
+      }
+    })
+  }
+
+  useEffect(() => {
+    getChinaColorData()
+  }, [])
 
   return (
     <View
@@ -23,7 +46,7 @@ export default function Colors() {
         scrollWithAnimation
       >
         <View className="colors-list">
-          {colors.map(c =>
+          {chinaColors.map(c =>
             <View
               className={ currentColor.hex === c.hex ? 'colors-item active' : 'colors-item' }
               style={{ backgroundColor: `${c.hex}` }}

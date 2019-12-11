@@ -26,7 +26,8 @@ class App extends Component {
       'pages/colors/index',
       'pages/camera/index',
       'pages/recognition/index',
-      'pages/collection/index'
+      'pages/collection/index',
+      'pages/explore/index'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -49,6 +50,9 @@ class App extends Component {
           pagePath: 'pages/colors/index',
           iconPath: 'images/color.png',
           selectedIconPath: "images/color-active.png",
+        }, {
+          text: '探索',
+          pagePath: 'pages/explore/index',
         }, {
           text: "我的收藏",
           pagePath: 'pages/collection/index',

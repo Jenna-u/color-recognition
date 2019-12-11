@@ -1,5 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro';
-import { View, Canvas, Text } from '@tarojs/components'
+import { View, Canvas, Text, MovableArea, MovableView, Image, CoverView  } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { createPixelArray, rgbToHex, showToast } from '../../utils/index'
 import quantize from 'quantize';
@@ -20,13 +20,15 @@ export default class Recognition extends Component {
   
    componentDidMount() {
     const ctx = Taro.createCanvasContext('canvas', this.$scope);
+    console.log('ctx', ctx)
     const imageUrl = this.$router.params.imageUrl
     const query = Taro.createSelectorQuery();
     //选择id
-    query.select('.color-card').boundingClientRect((rect) => {
-      const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
-      Taro.getImageInfo({ src: imageUrl }).then(res => {
-        const { width, height } = res;
+     query.select('.color-card').boundingClientRect((rect) => {
+       const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
+       console.log('ssss', parentHeight, parentWidth);
+       Taro.getImageInfo({ src: imageUrl }).then(res => {
+         const { width, height, path } = res;
         let w = width;
         let h = height;
 
@@ -42,13 +44,14 @@ export default class Recognition extends Component {
           canvasH: h + 'px'
         })
 
-        ctx.drawImage(imageUrl, 0, 0, width, height, 0, 0, w, h);
+        ctx.drawImage(path, 0, 0, width, height, 0, 0, w, h);
         ctx.draw(false, () => this.getImagePixel(width, height));
       })
     }).exec();    
   }
 
-  getImagePixel = async(w: number, h: number) => {
+  getImagePixel = async (w: number, h: number) => {
+    console.log('getImagePixel', w, h)
     showToast({
       title: '正在识别中...',
       icon: 'loading',
@@ -119,15 +122,48 @@ export default class Recognition extends Component {
     })
   }
 
+  handleMove = (e) => {
+    const { x, y } = e.detail
+    Taro.canvasGetImageData({
+      canvasId: 'canvas',
+      x,
+      y,
+      width: 10,
+      height: 10,
+    }).then(res => {
+      const { data } = res
+      this.setState({
+        currentColor: [data[0], data[1], data[2]]
+      })
+    })
+  }
+
   render() {
     const { palette, currentColor, canvasW, canvasH } = this.state
     return (
       <View className="recognition-container">
         <View className="color-card">
-          <Canvas
-            canvasId="canvas"
-            style={{ width: canvasW, height: canvasH }}
-          />
+          <MovableArea style={{ width: canvasW, height: canvasH }}>
+            <Canvas
+                canvasId="canvas"
+                style={{ width: canvasW, height: canvasH }}
+            />
+          {/* <Image src={this.$router.params.imageUrl} /> */}
+            <MovableView
+              className="magnifier"
+              direction="all"
+              style={{
+                width: '50px',
+                height: '50px',
+                backgroundColor: 'rgba(0,0,0,1)',
+                border: '3px solid red',
+                borderRadius: '50%',
+                zIndex: 99999,
+                zoom: 1
+              }}
+              onChange={(event) => this.handleMove(event)}
+            >+</MovableView>
+          </MovableArea>
           {palette.length > 0 &&
             <View  style="height: 200px;">
               <View className="collection">

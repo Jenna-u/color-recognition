@@ -39,9 +39,7 @@ export default function Collection() {
     })
   
     const db = Taro.cloud.database();
-    db.collection('colors').where({
-      _openid: openid
-    }).get().then(res => {
+    db.collection('colors').get().then(res => {
       hideToast();
       const { data } = res
       const getColor = data.map(x => ({ id: x._id, colors: x.colors, imgUrl: x.imgUrl })).reverse()
