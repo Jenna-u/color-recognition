@@ -9,8 +9,9 @@ export default function Colors() {
     navigationBarTitleText: '中国色',
   }
 
-  const [currentColor, setBg] = useState(colors[4])
+  const color = [{CMYK: [2, 16, 84, 0], RGB: [251, 218, 65], hex: "#fbda41", name: "油菜花黄", pinyin: "youcaihuahuang"}]
   const [chinaColors, getChinaColor] = useState([])
+  const [currentColor, setBg] = useState(color[0])
 
   const getChinaColorData = async () => {
     showToast({
@@ -20,7 +21,7 @@ export default function Colors() {
       duration: 0
     })
 
-    Taro.cloud.callFunction({
+    await Taro.cloud.callFunction({
       name: 'getChinaColors',
       complete: res => {
         const { result: { data } } = res
@@ -33,6 +34,8 @@ export default function Colors() {
   useEffect(() => {
     getChinaColorData()
   }, [])
+
+  console.log('currentColor', currentColor)
 
   return (
     <View

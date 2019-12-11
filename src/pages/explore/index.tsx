@@ -1,6 +1,7 @@
-import Taro, { useState, useEffect } from '@tarojs/taro';
+import Taro, { useState, useEffect, getClipboardData } from '@tarojs/taro';
 import { View, Camera, Button, Image, CoverView } from '@tarojs/components'
 import { showToast, hideToast } from '../../utils/index'
+import '../collection/index.scss'
 
 export default function Explore() {
 
@@ -8,9 +9,9 @@ export default function Explore() {
     navigationBarTitleText: '探索'
   }
 
-  const [colorList, getColorList] = useState([])
+  const [userColorListArray, getUserColorListData] = useState([])
   
-  const fetchColors = () => {
+  const fetchColors = async() => {
     showToast({
       title: '数据加载中...',
       mask: true,
@@ -18,16 +19,27 @@ export default function Explore() {
       duration: 0
     })
 
+    await Taro.cloud.callFunction({
+      name: 'getColorList',
+      complete: res => {
+        const { result: { data } } = res
+        getUserColorListData(data)
+      }
+    })
   }
 
   useEffect(() => {
-    // getUserInfo()
+
     fetchColors()
-  })
+  },[])
 
   return (
     <View>
       探索
+    {userColorListArray.map(x =>
+        <View className="colors-list">
+          {x.colors.map(c => <View className="item" style={{ backgroundColor: `#${c}` }} />)}
+        </View>) }
     </View>
   )
 }

@@ -15,7 +15,7 @@ exports.main = async (event, context) => {
 
   for (let i = 0; i < batchTimes; i++) {
     const promise = db.collection('colors').skip(i * MAX_LIMIT).limit(MAX_LIMIT).get()
-    task.push(promise)
+    tasks.push(promise)
   }
 
   return (await Promise.all(tasks)).reduce((acc, cur) => {
