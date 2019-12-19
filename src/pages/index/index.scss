@@ -4,6 +4,12 @@
 @import "~taro-ui/dist/style/components/tab-bar.scss";
 @import "~taro-ui/dist/style/components/badge.scss";
 
+.index-container {
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
 .index {
   // background: linear-gradient(rgb(204, 84, 204), rgb(86, 51, 168));
   display: flex;
@@ -15,10 +21,30 @@
 }
 
 .title {
-  font-size: 40px;
+  font-size: 80rpx;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   margin-top: 15%;
-  color: #6B400D;
+  color: #fff;
 }
+
+.menu-container {
+  margin-top: 60%;
+  display: flex;
+  justify-content: space-around;
+
+  .menu-item {
+    background-color: rgba(255, 255, 255, 0.87);
+    padding: 10rpx;
+    width: 280rpx;
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    border-radius: 10rpx;
+    margin-right: 20px;
+  }
+}
+
+
 
 .camera-area {
   margin-top: 60%;
@@ -51,6 +77,8 @@
     padding-top: 60px;
   }
 }
+
+
 
 .tips {
   margin-top: 40px;

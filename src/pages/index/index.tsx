@@ -10,7 +10,7 @@ export default function Index() {
     navigationBarTitleText: '首页'
   }
 
-  const[isOpened, setOpened] = useState(false)
+  const [isOpened, setOpened] = useState(false)
 
   const handleChooseImage = async() => {
     await Taro.chooseImage({
@@ -24,16 +24,16 @@ export default function Index() {
     })
   }
 
-  const handleOpenActionSheet = () => {
-    setOpened(true)
+  const handleOpenActionSheet = async() => {
+    await setOpened(true)
   }
 
-  const handleClose = () => {
-    setOpened(false)
+  const handleClose = async() => {
+    await setOpened(false)
   }
 
-  const handleClick = () => {
-    Taro.navigateTo({ url: "/pages/camera/index" }).then(() => {
+  const handleClick = async() => {
+    await Taro.navigateTo({ url: "/pages/camera/index" }).then(() => {
       setOpened(false)
     })
   }
@@ -53,7 +53,7 @@ export default function Index() {
         </View>
         <Text className="tips">点击拍照</Text>
       </View>
-      <AtActionSheet isOpened={isOpened} cancelText='cancel' onCancel={handleClose}>
+      <AtActionSheet isOpened={isOpened} cancelText='取消' onCancel={handleClose}>
         <AtActionSheetItem onClick={handleClick}>
           拍照
         </AtActionSheetItem>

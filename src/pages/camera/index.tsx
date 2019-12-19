@@ -29,7 +29,7 @@ export default function CameraIndex() {
       {
         imageUrl ?
         <Image
-          style='width: 100%; height: 100vh;'
+          style='width: 100%; height: 80vh;'
           src={imageUrl}
         /> :
         <Camera
@@ -38,16 +38,16 @@ export default function CameraIndex() {
           style="width: 100%; height: 80vh;"
         />
       }
-      <CoverView className="camera-control">
-        <CoverView className="button-group">
-          {imageUrl && <CoverView className="cancel" onClick={handleCancel}>返回</CoverView>}
-          <CoverView
+      <View className="camera-control">
+        <View className="button-group">
+          {imageUrl && <View className="cancel" onClick={handleCancel}>返回</View>}
+          <View
             className="take-photo"
             onClick={handleCamera}
           />
-          {imageUrl && <CoverView onClick={handleConfirm}>ok</CoverView>}
-        </CoverView>
-      </CoverView>
+          {imageUrl && <View onClick={handleConfirm}>ok</View>}
+        </View>
+      </View>
     </View>
   )
 }
