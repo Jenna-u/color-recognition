@@ -1,17 +1,17 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
-import { View, Image, MovableArea, MovableView } from '@tarojs/components'
+import { View, Image, MovableArea, MovableView, Button, OpenData } from '@tarojs/components'
 import { AtIcon } from 'taro-ui'
 import { showToast, hideToast } from '../../utils/index'
 import './index.scss'
 
 export default function Collection() {
 
-  Collection.config = {
-    navigationBarTitleText: '我的收藏'
-  }
+  // Collection.config = {
+  //   navigationBarTitleText: '我的收藏'
+  // }
 
   const [collectionList, getColorList] = useState([])
-  const [openid, setUserInfo] = useState('')
+  const [userInfo, setUserInfo] = useState({})
 
   const setClipboard = (data) => {
     Taro.setClipboardData({
@@ -21,13 +21,24 @@ export default function Collection() {
     })
   }
 
-  const getUserInfo = () => {
-    Taro.cloud.callFunction({
-      name: 'colors',
-      complete: res => {
-        setUserInfo(res.result.openid)
+  const getUserInfoData = () => {
+    console.log('enter')
+    Taro.getSetting({
+      success: (res) => {
+        const { authSetting } = res
+        console.log('authSetting', res)
+        // if (!authSetting['scope.userInfo']) {
+          Taro.getUserInfo({
+            withCredentials: false,
+            success: res => {
+              console.log('res', res)
+              setUserInfo(res.userInfo)
+            }
+          })
+        // }
       }
     })
+
   }
 
   const fetchColors = () => {
@@ -79,39 +90,46 @@ export default function Collection() {
   }
  
   useEffect(() => {
-    getUserInfo()
+    getUserInfoData()
     fetchColors()
   }, [])
 
+  console.log('userInfo', userInfo)
+
   return (
     <View className="collection-container">
+      <View className="user-info">
+        {userInfo.nickName ?
+          <View className="avatar-page">
+            <View><Image src={userInfo.avatarUrl} alt="头像" /></View>
+            <View className="nickName">{userInfo.nickName}</View>
+            <View>已收藏<Text className="length">{collectionList.length}</Text>组色卡</View>
+          </View> :
+          <Button
+            className="authorize"
+            openType="getUserInfo"
+            lang="zh_CN"
+            type='primary'
+            onGetUserInfo={getUserInfoData}
+          >
+            点击授权
+          </Button>
+        }
+      </View>
       <View className="list-container">
         {collectionList.length ? collectionList.map((x, index) =>
           <View className="collection-card">
-            {/* <MovableArea style={{ width: '100%', height: '200px', pointerEvents: 'none' }}> */}
-            <Image mode="aspectFill" style="display: block; width: 100%; height: 260px" src={x.imgUrl} />
-            {/* <MovableView
-              className="magnifier"
-              direction="all"
-              style={{
-                width: '30px',
-                height: '30px',
-                pointerEvents: 'auto',
-                backgroundColor: 'rgba(0,0,0,.2)',
-                border: '3px solid #fff',
-                borderRadius: '50%',
-              }}
-              onChange={(event) => handleMove(event)}
-            >+</MovableView>
-          </MovableArea> */}
             <View className="colors-list">
-              {x.colors.map(c => <View className="item" style={{ backgroundColor: `#${c}` }} />)}
+              {x.colors.map(c => <View className="item" style={{ backgroundColor: `#${c}` }}></View>)}
+            </View>
+            <View className="patch-list">
+              {x.colors.map(c => <View className="patch" style={{ color: `#${c}` }}>{`#${c}`}</View>)}
             </View>
             <View className="operator">
               <View onClick={() => setClipboard(x.colors)}>复制</View> |
               {/* <View>导出</View> | */}
               <View onClick={() => handleRemove(x.id)}>删除</View>
-              </View>
+            </View>
           </View>
         ) : <View className="empty">
               <AtIcon className="empty-icon" value='icon icon-ku' size='80' />

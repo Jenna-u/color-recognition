@@ -35,8 +35,6 @@ export default function Colors() {
     getChinaColorData()
   }, [])
 
-  console.log('currentColor', currentColor)
-
   return (
     <View
       className="colors-container"

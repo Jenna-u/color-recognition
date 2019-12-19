@@ -29,7 +29,6 @@ export default function Explore() {
   }
 
   useEffect(() => {
-
     fetchColors()
   },[])
 
@@ -37,9 +36,10 @@ export default function Explore() {
     <View>
       探索
     {userColorListArray.map(x =>
-        <View className="colors-list">
-          {x.colors.map(c => <View className="item" style={{ backgroundColor: `#${c}` }} />)}
-        </View>) }
+      <View className="colors-list">
+        {x.colors.map(c => <View className="item" style={{ backgroundColor: `#${c}` }} />)}
+      </View>)
+    }
     </View>
   )
 }
