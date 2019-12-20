@@ -1,4 +1,5 @@
 import Taro, { Component, Config } from '@tarojs/taro';
+import _ from 'lodash'
 import { View, Canvas, Text, MovableArea, MovableView, Image, CoverView  } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { createPixelArray, rgbToHex, showToast } from '../../utils/index'
@@ -15,7 +16,11 @@ export default class Recognition extends Component {
     palette: [],
     currentColor: [],
     canvasW: '100%',
-    canvasH: '80vh'
+    canvasH: '80vh',
+    pWidth: 0,
+    pHeight: 0,
+    x: 0,
+    y: 0,
   }
   
    componentDidMount() {
@@ -28,7 +33,7 @@ export default class Recognition extends Component {
        const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
        console.log('ssss', parentHeight, parentWidth);
        Taro.getImageInfo({ src: imageUrl }).then(res => {
-         const { width, height, path } = res;
+        const { width, height, path } = res;
         let w = width;
         let h = height;
 
@@ -41,7 +46,9 @@ export default class Recognition extends Component {
         }
 
         this.setState({
-          canvasH: h + 'px'
+          canvasH: h + 'px',
+          pWidth: parentWidth,
+          pHeight: parentHeight
         })
 
         ctx.drawImage(path, 0, 0, width, height, 0, 0, w, h);
@@ -51,7 +58,6 @@ export default class Recognition extends Component {
   }
 
   getImagePixel = async (w: number, h: number) => {
-    console.log('getImagePixel', w, h)
     showToast({
       title: '正在识别中...',
       icon: 'loading',
@@ -122,34 +128,73 @@ export default class Recognition extends Component {
     })
   }
 
-  handleMove = (e) => {
-    const { x, y } = e.detail
-    Taro.canvasGetImageData({
-      canvasId: 'canvas',
-      x,
-      y,
-      width: 10,
-      height: 10,
-    }).then(res => {
-      const { data } = res
-      this.setState({
-        currentColor: [data[0], data[1], data[2]]
-      })
+  handleStart = (e) => {
+    console.log('start', e)
+    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
+    this.setState({
+      x: pageX,
+      y: pageY
+    })
+  }
+
+  handleMove = async(e) => {
+    console.log('move', e)
+    if (!this.state.currentColor.length) return
+    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
+    const { pWidth, pHeight } = this.state
+
+    // 不能移出区域
+    if ((pageX < 0 || pageY < 0) && (pageX + 50 > pWidth || pageY + 50 > pHeight)) return 
+    
+    await this.setState({
+      x: pageX,
+      y: pageY
+    }, () => {
+      Taro.canvasGetImageData({
+        canvasId: 'canvas',
+        x: pageX,
+        y: pageY,
+        width: 50,
+        height: 50,
+      }).then(res => {
+        const { data } = res
+        this.setState({
+          currentColor: [data[0], data[1], data[2]]
+        })
+      }) 
+    })
+
+  }
+
+  handleEnd = (e) => {
+    console.log('end', e)
+    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
+    this.setState({
+      x: pageX,
+      y: pageY
     })
   }
 
   render() {
-    const { palette, currentColor, canvasW, canvasH } = this.state
+    const { palette, currentColor, canvasW, canvasH, x, y } = this.state
     return (
       <View className="recognition-container">
         <View className="color-card">
-          <MovableArea style={{ width: canvasW, height: canvasH }}>
-            <Canvas
-                canvasId="canvas"
-                style={{ width: canvasW, height: canvasH }}
-            />
+          {/* <MovableArea style={{ width: canvasW, height: canvasH }}> */}
+          <Canvas
+            canvasId="canvas"
+            style={{ width: canvasW, height: canvasH }}
+          >
+            {currentColor.length && <CoverView
+              className="move-dot"
+              style={{ transform: `translateX(${x}px) translateY(${y}px) translateZ(0px) scale(1)` }}
+              // onTouchStart={e => this.handleStart(e)}
+              onTouchMove={e => this.handleMove(e)}
+              onTouchEnd={e => this.handleEnd(e)}
+            />}
+          </Canvas>
           {/* <Image src={this.$router.params.imageUrl} /> */}
-            <MovableView
+            {/* <MovableView
               className="magnifier"
               direction="all"
               style={{
@@ -162,8 +207,8 @@ export default class Recognition extends Component {
                 zoom: 1
               }}
               onChange={(event) => this.handleMove(event)}
-            >+</MovableView>
-          </MovableArea>
+            >+</MovableView> */}
+          {/* </MovableArea> */}
           {palette.length > 0 &&
             <View  style="height: 200px;">
               <View className="collection">

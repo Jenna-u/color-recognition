@@ -4,6 +4,16 @@
   padding: 20px;
 }
 
+.move-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background-color:rgba($color: #fff, $alpha: 0.56);
+}
+
 .color-card {
   margin: 20px;
   border: 20px solid #fdfdfd;

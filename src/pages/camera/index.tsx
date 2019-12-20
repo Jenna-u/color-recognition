@@ -4,9 +4,9 @@ import { View, Camera, Image, CoverView } from '@tarojs/components'
 export default function CameraIndex() {
   const cameraContext = Taro.createCameraContext()
 
-  const [imageUrl, setImage] = useState('https://code.smartstudy.com/uploads/-/system/user/avatar/17/avatar.jpg?width=90')
+  // const [imageUrl, setImage] = useState('https://code.smartstudy.com/uploads/-/system/user/avatar/17/avatar.jpg?width=90')
 
-  // const [imageUrl, setImage] = useState('')
+  const [imageUrl, setImage] = useState('')
   const handleCamera = () => {
     cameraContext.takePhoto({
       quality: 'high',
@@ -29,13 +29,14 @@ export default function CameraIndex() {
       {
         imageUrl ?
         <Image
+          mode="aspectFit"
           style='width: 100%; height: 100vh;'
           src={imageUrl}
         >
           <CoverView className="camera-control">
             <CoverView className="has-image">
-              {imageUrl && <CoverView className="cancel" aria-role="button" onClick={handleCancel}>重拍</CoverView>}
-              {imageUrl && <CoverView className="use-photo" aria-role="button" onClick={handleConfirm}>使用照片</CoverView>}
+              <CoverView className="cancel" aria-role="button" onClick={handleCancel}>重拍</CoverView>
+              <CoverView className="use-photo" aria-role="button" onClick={handleConfirm}>使用照片</CoverView>
             </CoverView>
           </CoverView>
         </Image> :
