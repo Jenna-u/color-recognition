@@ -141,10 +141,10 @@ export default class Recognition extends Component {
     console.log('move', e)
     if (!this.state.currentColor.length) return
     const { pageX, pageY } = _.get(e.changedTouches, '0', [])
-    const { pWidth, pHeight } = this.state
+    const { pWidth, canvasH } = this.state
 
     // 不能移出区域
-    if ((pageX < 0 || pageY < 0) && (pageX + 50 > pWidth || pageY + 50 > pHeight)) return 
+    if ((pageX < 0 || pageY < 0) && (pageX + 50 > pWidth || pageY + 50 > canvasH)) return 
     
     await this.setState({
       x: pageX,
@@ -188,7 +188,7 @@ export default class Recognition extends Component {
             {currentColor.length && <CoverView
               className="move-dot"
               style={{ transform: `translateX(${x}px) translateY(${y}px) translateZ(0px) scale(1)` }}
-              // onTouchStart={e => this.handleStart(e)}
+              onLongPress={e => this.handleStart(e)}
               onTouchMove={e => this.handleMove(e)}
               onTouchEnd={e => this.handleEnd(e)}
             />}
