@@ -1,7 +1,6 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 import { showToast, hideToast } from '../../utils/index'
-
 import './index.scss'
 
 export default function ColorsDetail() {
