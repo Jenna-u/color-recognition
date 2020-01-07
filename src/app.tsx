@@ -24,7 +24,6 @@ class App extends Component {
     pages: [
       'pages/index/index',
       'pages/colors/index',
-      'pages/colors/details',
       'pages/camera/index',
       'pages/recognition/index',
       'pages/collection/index',

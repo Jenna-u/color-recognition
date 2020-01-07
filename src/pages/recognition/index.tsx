@@ -177,6 +177,8 @@ export default class Recognition extends Component {
 
   render() {
     const { palette, currentColor, canvasW, canvasH, x, y } = this.state
+    console.log('currentColor', currentColor)
+
     return (
       <View className="recognition-container">
         <View className="color-card">
@@ -217,9 +219,11 @@ export default class Recognition extends Component {
               <View className="color-output">
                 <Text>色卡: </Text>
                 {palette.map(c =>
-                  <View className="item">
-                    <View className="color-piece" onClick={() => this.handleChange(c)} style={{ 'background': `rgb(${c})` }} />
-                  </View>
+                  <View
+                    className={_.isEqual(currentColor, c) ? 'color-piece active' : 'color-piece'}
+                    onClick={() => this.handleChange(c)}
+                    style={{ 'background': `rgb(${c})` }}
+                  />
                 )}
               </View>
               {currentColor.length !== 0 && <View className="color-params">

@@ -37,6 +37,11 @@
     height: 60px;
     border-radius: 50%;
   }
+  
+  .active {
+    transform: scale(1.15);
+    box-shadow: 0px 3px 4px 1px rgba(0, 0, 0, .55);
+  }
 }
 
 .color-params {
