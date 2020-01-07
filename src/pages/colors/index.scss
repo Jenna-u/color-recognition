@@ -1,5 +1,6 @@
 .colors-container {
   background-color: #f5f6f8;
+  padding-bottom: 20rpx;
 
   // .title {
   //   position: fixed;
@@ -19,6 +20,11 @@
     color: #fff;
     line-height: 120px;
     text-align: center;
+  }
+
+  .act {
+    height: 124rpx;
+    box-shadow: 0px 0px 10px 2px rgba(107, 64, 13, 1);
   }
 
   .color-picker {
@@ -43,12 +49,12 @@
   }
 
   .active {
-    box-shadow: 0px 0px 12px rgba(107, 64, 13, 1);
+    box-shadow: 0px 0px 12px 1px rgba(107, 64, 13, 1);
   }
 
   .colors-info {
     margin: 20px 40px 20px 40px;
-    height: 20vh;
+    height: 22vh;
     padding: 20px;
     text-align: left;
     font-size: 28px;

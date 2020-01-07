@@ -11,6 +11,10 @@ export default function Colors() {
   }
 
   const navigate = [{
+    name: '全部',
+    hex: '#333'
+    // hex: '#6B400D'
+  }, {
     CMYK: [0, 28, 25, 0],
     RGB: [247, 205, 188],
     hex: "#f04b22",
@@ -68,7 +72,7 @@ export default function Colors() {
     pinyin: "rubai"
   }]
 
-  const color = [{CMYK: [2, 16, 84, 0], RGB: [251, 218, 65], hex: "#fbda41", name: "油菜花黄", pinyin: "youcaihuahuang"}]
+  const color = [{CMYK: [0, 28, 25, 0], RGB: [247, 205, 188], hex: "#f7cdbc", name: "润红", pinyin: "runhong"}]
   const [chinaColors, getChinaColor] = useState([])
   const [currentColor, setBg] = useState(color[0])
   const [currentNav, setNav] = useState('红')
@@ -93,7 +97,7 @@ export default function Colors() {
 
   const handleChange = (name) => {
     setNav(name)
-    const currentColor = chinaColors.filter(x => x.name.includes(name))
+    const currentColor = name === '全部' ? chinaColors : chinaColors.filter(x => x.name.includes(name))
     setBg(currentColor[0])
   }
 
@@ -101,23 +105,23 @@ export default function Colors() {
     getChinaColorData()
   }, [])
 
+  const data = currentNav === '全部' ? chinaColors : chinaColors.filter(x => x.name.includes(currentNav))
 
   return (
     <View
     className="colors-container"
   >
-    {/* <View className="title">中国传统颜色</View> */}
-      <View className="navigate">
-        {navigate.map(x =>
-          <View
-            className="navigate-item"
-            style={{ backgroundColor: `${x.hex}` }}
-            onClick={() => handleChange(x.name)}
-          >
-            {x.name}
-          </View>)
-        }
-      </View> 
+    <View className="navigate">
+      {navigate.map(x =>
+        <View
+          className={x.name === currentNav ? 'navigate-item act' : "navigate-item"}
+          style={{ backgroundColor: `${x.hex}` }}
+          onClick={() => handleChange(x.name)}
+        >
+          {x.name}
+        </View>)
+      }
+    </View> 
     <ScrollView
       scrollY
       className="color-picker"
@@ -125,7 +129,7 @@ export default function Colors() {
       scrollWithAnimation
     >
       <View className="colors-list">
-        {chinaColors.filter(x => x.name.includes(currentNav)).map(c =>
+        {data.map(c =>
           <View
             className={ currentColor.hex === c.hex ? 'colors-item active' : 'colors-item' }
             style={{ backgroundColor: `${c.hex}` }}
