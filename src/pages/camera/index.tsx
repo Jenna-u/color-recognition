@@ -51,7 +51,9 @@ export default function CameraIndex() {
                 className="take-photo"
                 aria-role="button"
                 onClick={handleCamera}
-              />
+              >
+                <CoverView className="inner-circle" aria-role="button" />
+              </CoverView>
             </CoverView>
           </CoverView>
         </Camera>

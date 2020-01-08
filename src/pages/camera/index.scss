@@ -38,9 +38,7 @@
     background-color: rgba($color: #fff, $alpha: 0.78);
     border-radius: 50%; 
 
-    &::before {
-      content: '';
-      display: inline-block;
+    .inner-circle {
       width: 110px;
       height: 110px;
       margin: 15px;
