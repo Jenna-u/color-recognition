@@ -76,7 +76,7 @@ export default class Recognition extends Component {
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
-        console.log('ssss', data, pixelArray);
+        // console.log('ssss', data, pixelArray);
         this.setState({
           isOpened: false,
           palette: colorMap.palette(),
@@ -94,7 +94,6 @@ export default class Recognition extends Component {
   }
 
   handleChange = (c) => {
-    console.log('cccc', c)
     this.setState({
       currentColor: c
     })
@@ -128,34 +127,46 @@ export default class Recognition extends Component {
     })
   }
 
+  getRect = (element) => {
+    console.log('element', element)
+    // let rectObj = {};
+    return Taro.createSelectorQuery().select(element).boundingClientRect().exec()
+    // return rectObj
+  }
+
   handleStart = (e) => {
-    console.log('start', e)
+    // console.log('start', e)
     const { pageX, pageY } = _.get(e.changedTouches, '0', [])
+    const x = pageX - 50
+    const y = pageY - 50
     this.setState({
-      x: pageX,
-      y: pageY
+      x,
+      y
     })
   }
 
   handleMove = async(e) => {
-    console.log('move', e)
+    
     if (!this.state.currentColor.length) return
     const { pageX, pageY } = _.get(e.changedTouches, '0', [])
     const { pWidth, canvasH } = this.state
+    const x = pageX - 50
+    const y = pageY - 50
+    console.log('move', e, pWidth, canvasH)
 
     // 不能移出区域
-    if ((pageX < 0 || pageY < 0) && (pageX + 50 > pWidth || pageY + 50 > canvasH)) return 
-    
+    if (x < 0 || y < 0) return 
+    if (pageX + 50 > pWidth || pageY > parseInt(canvasH, 10)) return 
     await this.setState({
-      x: pageX,
-      y: pageY
+      x,
+      y
     }, () => {
       Taro.canvasGetImageData({
         canvasId: 'canvas',
-        x: pageX,
-        y: pageY,
-        width: 50,
-        height: 50,
+        x,
+        y,
+        width: 1,
+        height: 1,
       }).then(res => {
         const { data } = res
         this.setState({
@@ -163,54 +174,36 @@ export default class Recognition extends Component {
         })
       }) 
     })
-
   }
 
   handleEnd = (e) => {
     console.log('end', e)
-    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
-    this.setState({
-      x: pageX,
-      y: pageY
-    })
+    // const { pageX, pageY } = _.get(e.changedTouches, '0', [])
+    // this.setState({
+    //   x: pageX,
+    //   y: pageY
+    // })
   }
 
   render() {
     const { palette, currentColor, canvasW, canvasH, x, y } = this.state
-    console.log('currentColor', currentColor)
 
     return (
       <View className="recognition-container">
         <View className="color-card">
-          {/* <MovableArea style={{ width: canvasW, height: canvasH }}> */}
           <Canvas
             canvasId="canvas"
             style={{ width: canvasW, height: canvasH }}
           >
             {currentColor.length && <CoverView
               className="move-dot"
+              id="glass"
               style={{ transform: `translateX(${x}px) translateY(${y}px) translateZ(0px) scale(1)` }}
-              onLongPress={e => this.handleStart(e)}
+              onTouchStart={e => this.handleStart(e)}
               onTouchMove={e => this.handleMove(e)}
               onTouchEnd={e => this.handleEnd(e)}
             />}
           </Canvas>
-          {/* <Image src={this.$router.params.imageUrl} /> */}
-            {/* <MovableView
-              className="magnifier"
-              direction="all"
-              style={{
-                width: '50px',
-                height: '50px',
-                backgroundColor: 'rgba(0,0,0,1)',
-                border: '3px solid red',
-                borderRadius: '50%',
-                zIndex: 99999,
-                zoom: 1
-              }}
-              onChange={(event) => this.handleMove(event)}
-            >+</MovableView> */}
-          {/* </MovableArea> */}
           {palette.length > 0 &&
             <View  style="height: 200px;">
               <View className="collection">

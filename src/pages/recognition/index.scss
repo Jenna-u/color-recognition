@@ -12,6 +12,7 @@
   height: 100rpx;
   border-radius: 50%;
   background-color:rgba($color: #fff, $alpha: 0.56);
+  cursor: crosshair;
 }
 
 .color-card {
@@ -19,6 +20,7 @@
   border: 20px solid #fdfdfd;
   border-radius: 10px;
   background-color: #fff;
+  position: relative;
 }
 
 .color-output {
