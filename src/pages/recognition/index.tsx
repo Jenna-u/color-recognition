@@ -156,7 +156,7 @@ export default class Recognition extends Component {
 
     // 不能移出区域
     if (x < 0 || y < 0) return 
-    if (pageX + 50 > pWidth || pageY > parseInt(canvasH, 10)) return 
+    if (pageX + 50 > pWidth || pageY + 50 > parseInt(canvasH, 10)) return 
     await this.setState({
       x,
       y
@@ -194,6 +194,10 @@ export default class Recognition extends Component {
           <Canvas
             canvasId="canvas"
             style={{ width: canvasW, height: canvasH }}
+            disableScroll
+            // onTouchStart={e => this.handleStart(e)}
+            onTouchMove={e => this.handleMove(e)}
+            // onTouchEnd={e => this.handleEnd(e)}
           >
             {currentColor.length && <CoverView
               className="move-dot"
