@@ -1,6 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro';
 import _ from 'lodash'
-import { View, Canvas, Text, MovableArea, MovableView, Image, CoverView  } from '@tarojs/components'
+import { View, Canvas, Text, CoverView  } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { createPixelArray, rgbToHex, showToast } from '../../utils/index'
 import quantize from 'quantize';
@@ -31,7 +31,7 @@ export default class Recognition extends Component {
     //选择id
      query.select('.color-card').boundingClientRect((rect) => {
        const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
-       console.log('ssss', parentHeight, parentWidth);
+      //  console.log('ssss', parentHeight, parentWidth);
        Taro.getImageInfo({ src: imageUrl }).then(res => {
         const { width, height, path } = res;
         let w = width;
@@ -155,8 +155,7 @@ export default class Recognition extends Component {
     console.log('move', e, pWidth, canvasH)
 
     // 不能移出区域
-    if (x < 0 || y < 0) return 
-    if (pageX + 50 > pWidth || pageY + 50 > parseInt(canvasH, 10)) return 
+    if (x < 0 || y < 0 || (pageX + 50 / 2 > pWidth || pageY + 50 / 2 > parseInt(canvasH, 10))) return  
     await this.setState({
       x,
       y
@@ -178,6 +177,7 @@ export default class Recognition extends Component {
 
   handleEnd = (e) => {
     console.log('end', e)
+
     // const { pageX, pageY } = _.get(e.changedTouches, '0', [])
     // this.setState({
     //   x: pageX,
@@ -195,8 +195,8 @@ export default class Recognition extends Component {
             canvasId="canvas"
             style={{ width: canvasW, height: canvasH }}
             disableScroll
-            // onTouchStart={e => this.handleStart(e)}
-            onTouchMove={e => this.handleMove(e)}
+            onTouchStart={e => this.handleStart(e)}
+            // onTouchMove={e => this.handleMove(e)}
             // onTouchEnd={e => this.handleEnd(e)}
           >
             {currentColor.length && <CoverView
