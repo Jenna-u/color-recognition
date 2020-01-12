@@ -1,6 +1,6 @@
 import Taro, { Component, Config } from '@tarojs/taro';
 import _ from 'lodash'
-import { View, Canvas, Text, CoverView  } from '@tarojs/components'
+import { View, Canvas, Text, CoverView, CoverImage  } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { createPixelArray, rgbToHex, showToast } from '../../utils/index'
 import quantize from 'quantize';
@@ -21,6 +21,9 @@ export default class Recognition extends Component {
     pHeight: 0,
     x: 0,
     y: 0,
+    pageX: 0,
+    pageY: 0,
+    isDragging: false
   }
   
    componentDidMount() {
@@ -136,31 +139,31 @@ export default class Recognition extends Component {
 
   handleStart = (e) => {
     // console.log('start', e)
-    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
-    const x = pageX - 50
-    const y = pageY - 50
+    const { x, y } = _.get(e.touches, '0', [])
     this.setState({
       x,
-      y
+      y,
+      isDragging: true,
     })
   }
 
   handleMove = async(e) => {
     
     if (!this.state.currentColor.length) return
-    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
-    const { pWidth, canvasH } = this.state
-    const x = pageX - 50
-    const y = pageY - 50
-    console.log('move', e, pWidth, canvasH)
+    const { x, y } = _.get(e.touches, '0', [])
+    // const { pWidth, canvasH } = this.state
+    // const x = pageX - 54
+    // const y = pageY - 54
+    console.log('move', x, y);
 
     // 不能移出区域
-    if (x < 0 || y < 0 || (pageX + 50 / 2 > pWidth || pageY + 50 / 2 > parseInt(canvasH, 10))) return  
+    // if (x < 0 || y < 0 || (pageX + 54 / 2 > pWidth || pageY + 54 / 2 > parseInt(canvasH, 10))) return  
     await this.setState({
       x,
-      y
-    }, () => {
-      Taro.canvasGetImageData({
+      y,
+      isDragging: true,
+    }, async() => {
+      await Taro.canvasGetImageData({
         canvasId: 'canvas',
         x,
         y,
@@ -177,17 +180,20 @@ export default class Recognition extends Component {
 
   handleEnd = (e) => {
     console.log('end', e)
-
+    setTimeout(() => {
+      this.setState({
+        // pageX,
+        // pageY,
+        isDragging: false
+      })
+    }, 200)
     // const { pageX, pageY } = _.get(e.changedTouches, '0', [])
-    // this.setState({
-    //   x: pageX,
-    //   y: pageY
-    // })
   }
 
   render() {
-    const { palette, currentColor, canvasW, canvasH, x, y } = this.state
-
+    const { palette, currentColor, pWidth, canvasW, canvasH, x, y, isDragging } = this.state
+    // console.log('currentColor', currentColor)
+    console.log('move', x, y);
     return (
       <View className="recognition-container">
         <View className="color-card">
@@ -196,17 +202,39 @@ export default class Recognition extends Component {
             style={{ width: canvasW, height: canvasH }}
             disableScroll
             onTouchStart={e => this.handleStart(e)}
-            // onTouchMove={e => this.handleMove(e)}
-            // onTouchEnd={e => this.handleEnd(e)}
+            onTouchMove={e => this.handleMove(e)}
+            onTouchEnd={e => this.handleEnd(e)}
           >
-            {currentColor.length && <CoverView
-              className="move-dot"
-              id="glass"
-              style={{ transform: `translateX(${x}px) translateY(${y}px) translateZ(0px) scale(1)` }}
-              onTouchStart={e => this.handleStart(e)}
-              onTouchMove={e => this.handleMove(e)}
-              onTouchEnd={e => this.handleEnd(e)}
-            />}
+            {currentColor.length &&
+              <CoverView
+                className="move-container"
+                style={{
+                  // height: canvasH,
+                  transform: `scale(${isDragging ? 1.8 : 1})`,
+                  transformOrigin: `${x}px ${y}px`
+                  // backgroundColor: `rgb(${currentColor})`
+                }}
+              >
+                <CoverView className="move-dot"
+                  id="glass"
+                  style={{
+                    left: `${x}px`,
+                    top: `${y}px`,
+                  }}
+                >
+                  <CoverImage
+                    className="picture"
+                    src={this.$router.params.imageUrl}
+                    style={{
+                      width: pWidth + 'px',
+                      height: canvasH,
+                      left: `${x * -1 + 50}px`,
+                      top: `${y * -1 + 25}px`,
+                    }}
+                  />
+                </CoverView>
+              </CoverView>
+            }
           </Canvas>
           {palette.length > 0 &&
             <View  style="height: 200px;">

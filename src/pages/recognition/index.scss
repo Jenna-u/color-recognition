@@ -3,16 +3,35 @@
   background-color: #f5f6f8;
   padding: 20px;
 }
+.move-container {
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  
+  pointer-events: none !important;
+  overflow: visible;
+}
 
 .move-dot {
   position: absolute;
-  left: 0;
-  top: 0;
   width: 100rpx;
   height: 100rpx;
+  margin-left: -50rpx;
+  margin-top: -50rpx;
   border-radius: 50%;
-  background-color:rgba($color: #fff, $alpha: 0.56);
+  border: 4rpx solid #fff;
   cursor: crosshair;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.picture {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  // visibility: hidden;
 }
 
 .color-card {
