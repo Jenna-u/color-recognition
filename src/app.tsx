@@ -51,9 +51,6 @@ class App extends Component {
           iconPath: 'images/color.png',
           selectedIconPath: "images/color-active.png",
         }, {
-          text: '探索',
-          pagePath: 'pages/explore/index',
-        }, {
           text: "我的收藏",
           pagePath: 'pages/collection/index',
           iconPath: 'images/collection.png',

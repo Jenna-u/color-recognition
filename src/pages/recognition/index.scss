@@ -4,14 +4,12 @@
   padding: 20px;
 }
 .move-container {
-  pointer-events: none;
+  width: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1000;
-  
-  pointer-events: none !important;
-  overflow: visible;
+  pointer-events: none;
+  // overflow: visible;
 }
 
 .move-dot {
@@ -29,6 +27,8 @@
 
 .picture {
   position: absolute;
+  left: 0;
+  top: 0;
   overflow: hidden;
   pointer-events: none;
   // visibility: hidden;

@@ -139,34 +139,34 @@ export default class Recognition extends Component {
 
   handleStart = (e) => {
     // console.log('start', e)
-    const { x, y } = _.get(e.touches, '0', [])
+    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
     this.setState({
-      x,
-      y,
-      isDragging: true,
+      x: pageX,
+      y: pageY,
+      isDragging: true
     })
   }
 
   handleMove = async(e) => {
     
     if (!this.state.currentColor.length) return
-    const { x, y } = _.get(e.touches, '0', [])
+    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
     // const { pWidth, canvasH } = this.state
     // const x = pageX - 54
     // const y = pageY - 54
-    console.log('move', x, y);
+    console.log('move',e, pageX, pageY);
 
     // 不能移出区域
     // if (x < 0 || y < 0 || (pageX + 54 / 2 > pWidth || pageY + 54 / 2 > parseInt(canvasH, 10))) return  
     await this.setState({
-      x,
-      y,
+      x: pageX,
+      y: pageY,
       isDragging: true,
     }, async() => {
       await Taro.canvasGetImageData({
         canvasId: 'canvas',
-        x,
-        y,
+        x: pageX,
+        y: pageY,
         width: 1,
         height: 1,
       }).then(res => {
@@ -180,20 +180,20 @@ export default class Recognition extends Component {
 
   handleEnd = (e) => {
     console.log('end', e)
+    const { pageX, pageY } = _.get(e.changedTouches, '0', [])
     setTimeout(() => {
       this.setState({
-        // pageX,
-        // pageY,
+        pageX,
+        pageY,
         isDragging: false
       })
     }, 200)
-    // const { pageX, pageY } = _.get(e.changedTouches, '0', [])
+
   }
 
   render() {
     const { palette, currentColor, pWidth, canvasW, canvasH, x, y, isDragging } = this.state
     // console.log('currentColor', currentColor)
-    console.log('move', x, y);
     return (
       <View className="recognition-container">
         <View className="color-card">
@@ -202,38 +202,39 @@ export default class Recognition extends Component {
             style={{ width: canvasW, height: canvasH }}
             disableScroll
             onTouchStart={e => this.handleStart(e)}
-            onTouchMove={e => this.handleMove(e)}
-            onTouchEnd={e => this.handleEnd(e)}
+            // onTouchMove={e => this.handleMove(e)}
+            // onTouchEnd={e => this.handleEnd(e)}
           >
             {currentColor.length &&
               <CoverView
                 className="move-container"
                 style={{
-                  // height: canvasH,
-                  transform: `scale(${isDragging ? 1.8 : 1})`,
-                  transformOrigin: `${x}px ${y}px`
-                  // backgroundColor: `rgb(${currentColor})`
+                  height: canvasH,
+                  transform: `scale(${isDragging ? 2 : 1})`,
+                  transformOrigin: `${x}px ${y}px`,
                 }}
               >
-                <CoverView className="move-dot"
-                  id="glass"
+              <CoverView className="move-dot"
+                onTouchStart={e => this.handleStart(e)}
+                onTouchMove={e => this.handleMove(e)}
+                onTouchEnd={e => this.handleEnd(e)}
+                style={{
+                  left: `${x}px`,
+                  top: `${y}px`,
+                }}
+              >
+                <CoverImage
+                  className="picture"
+                  src={this.$router.params.imageUrl}
                   style={{
-                    left: `${x}px`,
-                    top: `${y}px`,
+                    width: pWidth + 'px',
+                    height: canvasH,
+                    left: `${x * -1 + 50}px`,
+                    top: `${y * -1 + 25}px`,
                   }}
-                >
-                  <CoverImage
-                    className="picture"
-                    src={this.$router.params.imageUrl}
-                    style={{
-                      width: pWidth + 'px',
-                      height: canvasH,
-                      left: `${x * -1 + 50}px`,
-                      top: `${y * -1 + 25}px`,
-                    }}
-                  />
-                </CoverView>
+                />
               </CoverView>
+            </CoverView>
             }
           </Canvas>
           {palette.length > 0 &&
