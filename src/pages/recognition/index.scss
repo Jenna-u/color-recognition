@@ -26,6 +26,7 @@
 }
 
 .picture {
+  image-rendering: pixelated;
   position: absolute;
   left: 0;
   top: 0;
@@ -39,7 +40,6 @@
   border: 20px solid #fdfdfd;
   border-radius: 10px;
   background-color: #fff;
-  position: relative;
 }
 
 .color-output {

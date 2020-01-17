@@ -18,9 +18,9 @@ export default function Index() {
       sizeType: ['compressed'],
       sourceType: ['album'],
     }).then(res => {
+      setOpened(false)
       const imageUrl = res.tempFilePaths[0]
       Taro.navigateTo({ url: `/pages/recognition/index?imageUrl=${imageUrl}` })
-      setOpened(false)
     })
   }
 
