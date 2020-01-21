@@ -25,12 +25,12 @@ export default class Recognition extends Component {
       pHeight: 0,
       x: 0,
       y: 0,
-      pageX: 0,
-      pageY: 0,
+      offsetLeft: 0,
+      offsetTop: 0,
       isDragging: false
     }
 
-    this.handleMove = debounce(this.handleMove, 100)
+    this.handleMove = this.handleMove.bind(this)
   }
   
   componentDidMount() {
@@ -148,23 +148,23 @@ export default class Recognition extends Component {
 
   handleMove = async(e) => {
     if (!this.state.currentColor.length) return
-    const { pageX, pageY } = get(e.changedTouches, '0', [])
+    const { x, y } = get(e.changedTouches, '0', [])
     const { offsetLeft, offsetTop } = e.currentTarget
-    console.log('move',e, pageX, pageY);
+    console.log('move',e, x, y);
 
     // 不能移出区域
     // if (x < 0 || y < 0 || (pageX + 54 / 2 > pWidth || pageY + 54 / 2 > parseInt(canvasH, 10))) return  
     await this.setState({
-      pageX,
-      pageY,
-      x: offsetLeft,
-      y: offsetTop,
+      x,
+      y,
+      offsetLeft,
+      offsetTop,
       isDragging: true,
     }, async() => {
       await Taro.canvasGetImageData({
         canvasId: 'canvas',
-        x: pageX,
-        y: pageY,
+        x,
+        y,
         width: 1,
         height: 1,
       }).then(res => {
@@ -190,7 +190,7 @@ export default class Recognition extends Component {
   }
 
   render() {
-    const { palette, currentColor, pWidth, canvasW, canvasH, x, y, pageX, pageY, isDragging } = this.state
+    const { palette, currentColor, pWidth, canvasW, canvasH, x, y, offsetLeft, offsetTop, isDragging } = this.state
     // console.log('currentColor', currentColor)
     return (
       <View className="recognition-container">
@@ -198,27 +198,27 @@ export default class Recognition extends Component {
           <Canvas
             canvasId="canvas"
             style={{ width: canvasW, height: canvasH }}
-            disableScroll
-            onTouchStart={e => this.handleStart(e)}
-            // onTouchMove={e => this.handleMove(e)}
+            // disableScroll
+            // onTouchStart={e => this.handleStart(e)}
+            // onTouchMove={this.handleMove}
             // onTouchEnd={e => this.handleEnd(e)}
           >
-            {currentColor.length &&
+            {/* {currentColor.length &&
               <CoverView
                 className="move-container"
                 style={{
                   height: canvasH,
                   transform: `scale(${isDragging ? 2 : 1})`,
-                  transformOrigin: `${pageX}px ${pageY}px`,
+                  transformOrigin: `${x}px ${y}px`,
                 }}
               >
               <CoverView className="move-dot"
-                onTouchStart={e => this.handleStart(e)}
+                // onTouchStart={e => this.handleStart(e)}
                 onTouchMove={this.handleMove}
                 onTouchEnd={e => this.handleEnd(e)}
                 style={{
-                  left: `${pageX}px`,
-                  top: `${pageY}px`,
+                  left: `${x}px`,
+                  top: `${y}px`,
                 }}
               >
                 <CoverImage
@@ -227,13 +227,13 @@ export default class Recognition extends Component {
                   style={{
                     width: pWidth + 'px',
                     height: canvasH,
-                    left: `${pageX * -1 + 50}px`,
-                    top: `${pageY * -1 + 25}px`,
+                    left: `${x * -1 + 50}px`,
+                    top: `${y * -1 + 25}px`,
                   }}
                 />
               </CoverView>
             </CoverView>
-            }
+            } */}
           </Canvas>
           {palette.length > 0 &&
             <View  style="height: 200px;">
