@@ -92,6 +92,9 @@ export default function Collection() {
   useEffect(() => {
     getUserInfoData()
     fetchColors()
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
   }, [])
 
   console.log('userInfo', userInfo)

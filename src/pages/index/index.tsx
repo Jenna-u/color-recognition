@@ -1,4 +1,4 @@
-import Taro, { useState } from '@tarojs/taro'
+import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtActionSheetItem, AtActionSheet } from 'taro-ui'
 import title from './title.png'
@@ -37,6 +37,12 @@ export default function Index() {
       setOpened(false)
     })
   }
+
+  useEffect(() => {
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
+  }, [])
 
   return (
     <View>

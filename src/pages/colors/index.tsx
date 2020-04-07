@@ -103,6 +103,9 @@ export default function Colors() {
 
   useEffect(() => {
     getChinaColorData()
+    Taro.showShareMenu({
+      withShareTicket: true
+    })
   }, [])
 
   const data = currentNav === '全部' ? chinaColors : chinaColors.filter(x => x.name.includes(currentNav))
