@@ -1,14 +1,26 @@
-import Taro, { Component, Config } from '@tarojs/taro'
+import Taro, { Component, Config, arrayBuffer } from '@tarojs/taro'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
-import debounce from 'lodash/debounce'
-import { View, Canvas, Text, CoverView, CoverImage, MovableArea, MovableView  } from '@tarojs/components'
+import { View, Canvas, Text, CoverView, CoverImage  } from '@tarojs/components'
 import { AtTag } from 'taro-ui'
 import { createPixelArray, rgbToHex, showToast } from '../../utils/index'
 import quantize from 'quantize';
 import './index.scss'
 
-export default class Recognition extends Component {
+export default interface State {
+  palette: any[],
+  currentColor: any[],
+  canvasW: string,
+  canvasH: string,
+  pWidth: number,
+  pHeight: number,
+  pageX: number,
+  pageY: number,
+  isDragging: boolean,
+  isInit: boolean
+}
+
+export default class Recognition extends Component<any, State> {
 
   config: Config = {
     navigationBarTitleText: '识色'
@@ -25,9 +37,8 @@ export default class Recognition extends Component {
       pHeight: 0,
       pageX: 0,
       pageY: 0,
-      offsetLeft: 0,
-      offsetTop: 0,
-      isDragging: false
+      isDragging: false,
+      isInit: true
     }
 
     this.handleMove = this.handleMove.bind(this)
@@ -64,9 +75,6 @@ export default class Recognition extends Component {
         ctx.draw(false, () => this.getImagePixel(width, height));
       })
      }).exec();
-     Taro.showShareMenu({
-      withShareTicket: true
-    })
   }
 
   getImagePixel = async (w: number, h: number) => {
@@ -143,8 +151,8 @@ export default class Recognition extends Component {
     // console.log('start', e)
     const { pageX, pageY } = get(e.changedTouches, '0', [])
     this.setState({
-      x: pageX,
-      y: pageY,
+      pageX,
+      pageY,
       isDragging: true
     })
   }
@@ -152,17 +160,14 @@ export default class Recognition extends Component {
   handleMove = async(e) => {
     if (!this.state.currentColor.length) return
     const { pageX, pageY } = get(e.changedTouches, '0', [])
-    const { offsetLeft, offsetTop } = e.currentTarget
+    // const { offsetLeft, offsetTop } = e.currentTarget
     console.log('move',e, pageX, pageY);
 
-    // 不能移出区域
-    // if (x < 0 || y < 0 || (pageX + 54 / 2 > pWidth || pageY + 54 / 2 > parseInt(canvasH, 10))) return  
     await this.setState({
       pageX,
       pageY,
-      offsetLeft,
-      offsetTop,
       isDragging: true,
+      isInit: false
     }, async() => {
       await Taro.canvasGetImageData({
         canvasId: 'canvas',
@@ -193,8 +198,8 @@ export default class Recognition extends Component {
   }
 
   render() {
-    const { palette, currentColor, pWidth, canvasW, canvasH, pageX, pageY, offsetLeft, offsetTop, isDragging } = this.state
-    // console.log('currentColor', currentColor)
+    const { palette, currentColor, pWidth, canvasW, canvasH, pageX, pageY, isDragging, isInit } = this.state
+
     return (
       <View className="recognition-container">
         <View className="color-card">
@@ -214,14 +219,19 @@ export default class Recognition extends Component {
                   transform: `scale(${isDragging ? 1.5 : 1})`,
                   transformOrigin: `${pageX}px ${pageY}px`,
                 }}
-            >
-              <CoverView className="move-dot"
                 onTouchStart={e => this.handleStart(e)}
                 onTouchMove={this.handleMove}
                 onTouchEnd={e => this.handleEnd(e)}
+            >
+              <CoverView className="move-dot"
+                // onTouchStart={e => this.handleStart(e)}
+                // onTouchMove={this.handleMove}
+                // onTouchEnd={e => this.handleEnd(e)}
                 style={{
                   left: `${pageX}px`,
                   top: `${pageY}px`,
+                  transformOrigin: `${pageX}px ${pageY}px`,
+                  backgroundColor: `#${rgbToHex(currentColor)}`
                 }}
               >
                 <CoverImage
@@ -230,8 +240,8 @@ export default class Recognition extends Component {
                   style={{
                     width: pWidth + 'px',
                     height: canvasH,
-                    left: `${pageX * -1}px`,
-                    top: `${pageY * -1}px`,
+                    left: isInit ? '25px' : `${pageX * -1}px`,
+                    top: isInit ? '25px' : `${pageY * -1}px`
                   }}
                 />
               </CoverView>

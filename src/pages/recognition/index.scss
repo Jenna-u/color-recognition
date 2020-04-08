@@ -2,7 +2,13 @@
 .recognition-container {
   background-color: #f5f6f8;
   padding: 20px;
+  overflow-y: scroll;
 }
+
+.color-card {
+  position: relative;
+}
+
 .move-container {
   width: 100%;
   position: absolute;
@@ -16,23 +22,29 @@
   position: absolute;
   width: 100rpx;
   height: 100rpx;
-  margin-left: -50rpx;
-  margin-top: -50rpx;
   border-radius: 50%;
-  border: 4rpx solid #fff;
+  border: 8rpx solid #fff;
   cursor: crosshair;
   overflow: hidden;
   background-color: #fff;
+  margin: -50rpx;
+  transition: transform .2s ease;
 }
 
 .picture {
   image-rendering: pixelated;
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 25px;
+  top: 25px;
   overflow: hidden;
   pointer-events: none;
-  // visibility: hidden;
+  transform-origin: 0 0;
+  width: 1000px;
+  // position: relative;
+  user-select: none;
+  transition: all 0s ease;
+  opacity: 0;
+  box-shadow: rgba(0,0,0,.02) 0 0 0 1px inset;
 }
 
 .color-card {

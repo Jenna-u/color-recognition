@@ -72,22 +72,6 @@ export default function Collection() {
       }
     })
   }
-
-  const handleMove = (e) => {
-    const { x, y } = e.detail
-    Taro.canvasGetImageData({
-      canvasId: 'canvas',
-      x,
-      y,
-      width: 10,
-      height: 10,
-    }).then(res => {
-      const { data } = res
-      this.setState({
-        currentColor: [data[0], data[1], data[2]]
-      })
-    })
-  }
  
   useEffect(() => {
     getUserInfoData()
