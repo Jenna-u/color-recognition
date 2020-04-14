@@ -2,12 +2,12 @@ import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtActionSheetItem, AtActionSheet } from 'taro-ui'
 import title from './title.png'
-import cameraIcon from './icon.png'
+import cameraIcon from './camera.png'
 import './index.scss'
 
 export default function Index() {
   Index.config = {
-    navigationBarTitleText: '首页'
+    navigationBarTitleText: '拍照识色'
   }
 
   const [isOpened, setOpened] = useState(false)
@@ -48,16 +48,11 @@ export default function Index() {
     <View>
       <View className='index'>
         <View className='title'>
-          <Image mode="aspectFit" src={title} alt="拍照识色1" style="width: 222px; height: 44px;" />
+          <Text>拍照识色</Text>
         </View>
         <View className='camera-area' onClick={handleOpenActionSheet}>
-          <View className="second-circle">
-            <View className="third-circle">
-              <Image mode="aspectFit" src={cameraIcon} style="width: 50px; height: 50px; margin-top: 30px;" />
-            </View>
-          </View>
+          <Image mode="aspectFit" src={cameraIcon} style="width: 64px; height: 64px;" />
         </View>
-        <Text className="tips">点击拍照</Text>
       </View>
       <AtActionSheet isOpened={isOpened} cancelText='取消' onCancel={handleClose}>
         <AtActionSheetItem onClick={handleClick}>
