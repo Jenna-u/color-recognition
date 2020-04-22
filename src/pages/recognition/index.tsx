@@ -1,4 +1,4 @@
-import Taro, { Component, Config, arrayBuffer } from '@tarojs/taro'
+import Taro, { Component, Config } from '@tarojs/taro'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import { View, Canvas, Text, CoverView, CoverImage  } from '@tarojs/components'
@@ -45,39 +45,100 @@ export default class Recognition extends Component<any, State> {
   }
   
   componentDidMount() {
-    const ctx = Taro.createCanvasContext('canvas', this.$scope);
-    const imageUrl = this.$router.params.imageUrl
-    const query = Taro.createSelectorQuery();
+    // const ctx = Taro.createCanvasContext('canvas', this.$scope);
+    const query = Taro.createSelectorQuery()
+    query.select('#myCanvas')
+      .fields({ node: true, size: true })
+      .exec(res => this.init(res))
+    
+
     //选择id
-     query.select('.color-card').boundingClientRect((rect) => {
-       const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
-      //  console.log('ssss', parentHeight, parentWidth);
-       Taro.getImageInfo({ src: imageUrl }).then(res => {
-        const { width, height, path } = res;
-        let w = width;
-        let h = height;
+    //  query.select('.color-card').boundingClientRect((rect) => {
+    //    const { width: parentWidth, height: parentHeight } = rect as Taro.clientRectElement
+    //   //  console.log('ssss', parentHeight, parentWidth);
+    //    Taro.getImageInfo({ src: imageUrl }).then(res => {
+    //     const { width, height, path } = res;
+    //     let w = width;
+    //     let h = height;
 
-        if (width > height) {
-          w = parentWidth
-          h = Math.floor(height / width * parentWidth)
-        } else {
-          h = parentHeight
-          w = Math.floor(width / height * parentHeight)
-        }
+    //     if (width > height) {
+    //       w = parentWidth
+    //       h = Math.floor(height / width * parentWidth)
+    //     } else {
+    //       h = parentHeight
+    //       w = Math.floor(width / height * parentHeight)
+    //     }
 
-        this.setState({
-          canvasH: h + 'px',
-          pWidth: parentWidth,
-          pHeight: parentHeight
-        })
+    //     this.setState({
+    //       canvasH: h + 'px',
+    //       pWidth: parentWidth,
+    //       pHeight: parentHeight
+    //     })
 
-        ctx.drawImage(path, 0, 0, width, height, 0, 0, w, h);
-        ctx.draw(false, () => this.getImagePixel(width, height));
-      })
-     }).exec();
+    //     ctx.drawImage(path, 0, 0, width, height, 0, 0, w, h);
+    //     ctx.draw(false, () => this.getImagePixel(width, height));
+    //   })
+    //  }).exec();
   }
 
-  getImagePixel = async (w: number, h: number) => {
+  init = async (res) => {
+    const imageUrl = this.$router.params.imageUrl
+    const { width, height } = res[0]
+
+    const canvas = res[0].node
+    const ctx = canvas.getContext('2d')
+
+    const dpr = Taro.getSystemInfoSync().pixelRatio
+    canvas.width = width * dpr
+    canvas.height = height * dpr
+  
+    
+    const img = canvas.createImage()
+    const imageData = canvas.createImageData()
+
+    img.src = imageUrl
+    img.onload = () => {
+      console.log('sss', imageData)
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+      // this.getImagePixel(ctx, img.width, img.height)
+      Taro.canvasGetImageData({
+        canvasId: 'myCanvas',
+        x: 0,
+        y: 0,
+        width: 10,
+        height: 10,
+        success: (res) => {
+          const { width, height, data } = res
+          const count = width * height;
+          // const pixelArray = createPixelArray(data, count, 10)
+          // const colorMap = quantize(pixelArray, 5);
+          console.log('ssss', data);
+          // this.setState({
+          //   isOpened: false,
+          //   palette: colorMap.palette(),
+          //   currentColor: colorMap.map(pixelArray[0])
+          // }, () => {
+          //   showToast({
+          //     title: '识别成功!',
+          //     icon: 'success',
+          //     mask: true,
+          //     duration: 1000
+          //   })
+          // })
+      }
+      }, this.$scope)
+    }
+
+    // Taro.getImageInfo({ src: imageUrl }).then(res => {
+    //   const { width, height, path } = res
+    //   console.log('width', path)
+      
+    //   ctx.draw(false)
+    // })
+  }
+
+  getImagePixel = async (ctx, w: number, h: number) => {
+
     showToast({
       title: '正在识别中...',
       icon: 'loading',
@@ -86,7 +147,7 @@ export default class Recognition extends Component<any, State> {
     })
 
     await Taro.canvasGetImageData({
-      canvasId: 'canvas',
+      canvasId: 'myCanvas',
       x: 0,
       y: 0,
       width: w,
@@ -96,7 +157,7 @@ export default class Recognition extends Component<any, State> {
         const count = width * height;
         const pixelArray = createPixelArray(data, count, 10)
         const colorMap = quantize(pixelArray, 5);
-        // console.log('ssss', data, pixelArray);
+        console.log('ssss', data);
         this.setState({
           isOpened: false,
           palette: colorMap.palette(),
@@ -170,7 +231,7 @@ export default class Recognition extends Component<any, State> {
       isInit: false
     }, async() => {
       await Taro.canvasGetImageData({
-        canvasId: 'canvas',
+        canvasId: 'myCanvas',
         x: pageX,
         y: pageY,
         width: 1,
@@ -204,7 +265,8 @@ export default class Recognition extends Component<any, State> {
       <View className="recognition-container">
         <View className="color-card">
           <Canvas
-            canvasId="canvas"
+            type="2d"
+            id="myCanvas"
             style={{ width: canvasW, height: canvasH }}
             disableScroll
             onTouchStart={e => this.handleStart(e)}
@@ -224,9 +286,6 @@ export default class Recognition extends Component<any, State> {
                 onTouchEnd={e => this.handleEnd(e)}
             >
               <CoverView className="move-dot"
-                // onTouchStart={e => this.handleStart(e)}
-                // onTouchMove={this.handleMove}
-                // onTouchEnd={e => this.handleEnd(e)}
                 style={{
                   left: `${pageX}px`,
                   top: `${pageY}px`,

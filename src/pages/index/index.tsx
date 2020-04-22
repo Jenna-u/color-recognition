@@ -1,9 +1,9 @@
 import Taro, { useState, useEffect } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import { AtActionSheetItem, AtActionSheet } from 'taro-ui'
-import title from './title.png'
 import cameraIcon from './camera.svg'
 import './index.scss'
+
 
 export default function Index() {
   Index.config = {
