@@ -207,11 +207,11 @@ export default class Recognition extends Component<any, State> {
             canvasId="canvas"
             style={{ width: canvasW, height: canvasH }}
             disableScroll
-            onTouchStart={e => this.handleStart(e)}
+            // onTouchStart={e => this.handleStart(e)}
             // onTouchMove={this.handleMove}
             // onTouchEnd={e => this.handleEnd(e)}
           >
-            {currentColor.length &&
+            {/* {currentColor.length &&
               <CoverView
                 className="move-container"
                 style={{
@@ -246,7 +246,7 @@ export default class Recognition extends Component<any, State> {
                 />
               </CoverView>
             </CoverView>
-            }
+            } */}
           </Canvas>
           {palette.length > 0 &&
             <View  style="height: 200px;">
